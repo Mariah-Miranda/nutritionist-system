@@ -1,0 +1,66 @@
+/* assets/css/forms.css */
+
+/* General form container */
+.form-container {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    max-width: 700px; /* Adjust as needed for form width */
+    margin: 2rem auto;
+}
+
+/* Form groups/sections */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* font-medium */
+    color: #4a5568; /* text-gray-700 */
+    margin-bottom: 0.5rem;
+}
+
+/* Specific input styles (overrides/enhances style.css) */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    /* Inherits from style.css, add specific form styling here */
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+/* Checkbox/Radio styling if needed */
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+/* Error messages for form validation */
+.error-message {
+    color: #ef4444; /* Red */
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Success messages for form submission */
+.success-message {
+    color: #10b981; /* Green */
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Button group for form actions (e.g., Cancel, Save) */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}

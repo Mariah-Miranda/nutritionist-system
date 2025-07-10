@@ -1,0 +1,102 @@
+/* assets/css/admin.css */
+
+/* Styles for admin-specific pages like user management, settings */
+
+/* Admin panel tabs */
+.admin-tabs {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-tabs button {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    color: #4a5568;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease-in-out;
+    background-color: transparent; /* Ensure no default button background */
+    border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+}
+
+.admin-tabs button:hover {
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+.admin-tabs button.active {
+    color: #2563eb;
+    border-color: #3b82f6;
+    font-weight: 600;
+}
+
+/* Table styles for user management */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f0f4f8;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px; /* Full rounded corners */
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.status-badge.active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.status-badge.admin {
+    background-color: #e0e7ff;
+    color: #3730a3;
+}
+
+.status-badge.nutritionist {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.sales {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* Action buttons in tables */
+.admin-table .action-buttons a {
+    margin-right: 0.75rem;
+    color: #3b82f6;
+    font-size: 0.875rem;
+}
+.admin-table .action-buttons a:hover {
+    text-decoration: underline;
+}

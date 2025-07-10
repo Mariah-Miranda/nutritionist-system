@@ -1,0 +1,106 @@
+/* assets/css/style.css */
+
+/* Base styles for the entire application */
+body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* General container for main content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* Links */
+a {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+/* Buttons - basic styles, further styled by Tailwind or specific CSS */
+button, .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    background-color: #22c55e; /* Green */
+    color: #ffffff;
+}
+.btn-primary:hover {
+    background-color: #16a34a;
+}
+
+.btn-secondary {
+    background-color: #e2e8f0; /* Light Gray */
+    color: #2d3748;
+    border-color: #cbd5e0;
+}
+.btn-secondary:hover {
+    background-color: #cbd5e0;
+}
+
+/* Form elements - basic styles, further styled by forms.css */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't add to total width */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* Utility classes (can be replaced by Tailwind if preferred) */
+.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+.p-6 {
+    padding: 1.5rem;
+}
+.mb-4 {
+    margin-bottom: 1rem;
+}
+/* etc. */

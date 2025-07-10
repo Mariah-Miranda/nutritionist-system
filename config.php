@@ -9,7 +9,7 @@ define('DB_PASS', ''); // Your MySQL password (often empty for 'root' on local s
 define('SITE_NAME', 'Nutritionist System');
 define('DEFAULT_CURRENCY', 'UGX');
 define('TAX_RATE_PERCENT', 8); // Example default, will be fetched from DB later
-
+define('BASE_URL', '/nutritionistsystem/nutritionist-system/');
 // Set default timezone (important for date/time functions)
 date_default_timezone_set('Africa/Kampala'); // Set to your local timezone 
 

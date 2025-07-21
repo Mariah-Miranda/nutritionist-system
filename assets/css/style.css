@@ -327,6 +327,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Links */
 
+<<<<<<< HEAD
+=======
+a:hover {
+    color: V#2563eb;
+    text-decoration: underline;
+}
+>>>>>>> a3343cdef5e9f699bd6d1b8ff66d4c9a421eb927
 
 /* Buttons - basic styles, further styled by Tailwind or specific CSS */
 button, .btn {

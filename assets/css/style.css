@@ -16,7 +16,309 @@ body {
     margin: 0 auto;
     padding: 1rem;
 }
+:root {
+  --font-family: Arial, sans-serif;
+  --background-color: #f9f9f9;
+  --text-color: #333;
+  --primary-color: #2e8b57;
+  --secondary-color: #388e3c;
+  --hover-color: #3aa76d;
+  --danger-color: #d9534f;
+  --border-color: #ccc;
+  --light-grey: #eaeaea;
+  --table-stripe: #f8f9fa;
+  --table-hover: #f1f8e9;
+  --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --transition: background-color 0.3s ease;
+}
 
+/* Global Styles */
+
+
+h2 {
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+form.form-box {
+  max-width: 500px;
+  padding: 20px;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+form.form-box input,
+form.form-box textarea,
+form.form-box select {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+form.form-box button {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+form.form-box .btn-cancel {
+  margin-left: 10px;
+  color: #888;
+  text-decoration: none;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+thead {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Stock Status */
+.low-stock {
+  color: var(--danger-color);
+  font-weight: bold;
+}
+
+.in-stock {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Search Bar */
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.search-bar input[type="text"] {
+  padding: 8px;
+  width: 250px;
+}
+
+.search-bar button,
+.search-bar a {
+  padding: 8px 12px;
+  background: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+/* Sales Index Page */
+.sales-index-page {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.sales-index-title {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.sales-index-table-wrapper {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.sales-index-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.sales-index-table thead {
+  background: var(--primary-color);
+  color: white;
+}
+
+.sales-index-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.sales-index-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--light-grey);
+  text-align: left;
+}
+
+.sales-index-table tbody tr:nth-child(even) {
+  background-color: var(--table-stripe);
+}
+
+.sales-index-table tbody tr:hover {
+  background-color: var(--table-hover);
+}
+
+/* Navigation Styles */
+.sales-index-nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  padding-bottom: 10px;
+}
+
+.sales-index-link {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-right: 10px;
+  display: inline-block;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.sales-index-link:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .sales-index-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sales-index-link {
+    width: 80%;
+    text-align: center;
+  }
+
+  .sales-index-table th, 
+  .sales-index-table td {
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Currency Highlight */
+.sales-index-table td:nth-child(2) {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+
+/* Custom CSS for this page */
+.sale-form {
+  max-width: 650px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Main Form Card */
+form.sale-form {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Fieldset Styling */
+form.sale-form fieldset {
+  border: 1px solid #ccc;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+form.sale-form legend {
+  font-weight: 600;
+  color: #333;
+  padding: 0 10px;
+}
+
+/* Inputs and Labels */
+form.sale-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #444;
+}
+
+form.sale-form input[type="text"],
+form.sale-form input[type="number"],
+form.sale-form select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: 0.3s ease;
+}
+
+form.sale-form input:focus,
+form.sale-form select:focus {
+  outline: none;
+  border-color: #007b5e;
+  box-shadow: 0 0 5px rgba(0, 123, 94, 0.2);
+}
+
+/* Buttons */
+form.sale-form button {
+  background-color: #198754;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form.sale-form button:hover {
+  background-color: #146c43;
+}
+
+form.sale-form .add-product-btn {
+  margin-bottom: 15px;
+}
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
@@ -24,16 +326,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Links */
-a {
-    color: #3b82f6;
-    text-decoration: none;
-    transition: color 0.2s ease-in-out;
-}
 
-a:hover {
-    color: #2563eb;
-    text-decoration: underline;
-}
 
 /* Buttons - basic styles, further styled by Tailwind or specific CSS */
 button, .btn {

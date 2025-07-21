@@ -29,10 +29,10 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Custom CSS files -->
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/dashboard.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/forms.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>../assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>../assets/css/dashboard.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>../assets/css/forms.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>../assets/css/admin.css">
 </head>
 <body class="bg-gray-100 font-inter">
     <div class="flex h-screen">
@@ -44,44 +44,44 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
             <nav class="flex-1">
                 <ul class="space-y-3">
                     <li>
-                        <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../admin/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-tachometer-alt text-xl"></i>
                             <span class="text-lg">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>patients/list.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../patients/list.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-users text-xl"></i>
                             <span class="text-lg">Patients</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>appointments/today.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../appointments/today.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-calendar-alt text-xl"></i>
                             <span class="text-lg">Appointments</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>products/inventory.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../products/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-box-open text-xl"></i>
                             <span class="text-lg">Products</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>sales/new.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../sale/new.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-cash-register text-xl"></i>
                             <span class="text-lg">Sales</span>
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>admin/reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../admin/reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-chart-line text-xl"></i>
                             <span class="text-lg">Analytics</span>
                         </a>
                     </li>
                     <?php if ($currentUserRole === 'Admin'): // Admin specific link ?>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>admin/settings/users.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../admin/settings/users.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-cog text-xl"></i>
                             <span class="text-lg">Admin Settings</span>
                         </a>

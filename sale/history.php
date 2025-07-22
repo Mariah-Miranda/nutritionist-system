@@ -1,8 +1,8 @@
 <?php
-include('../includes/db.php');
+include('../includes/db_connect.php');
 
-// Query using 'clients' and 'clients_id' as per your database
-$sales = mysqli_query($conn, "
+// Run query using PDO
+$stmt = $pdo->query("
     SELECT s.id, c.name, s.total_amount, s.sale_date
     FROM sales s
     JOIN clients c ON s.clients_id = c.id
@@ -18,7 +18,7 @@ $sales = mysqli_query($conn, "
 </head>
 <body>
     <h2>Sales History</h2>
-  <table>
+    <table>
         <thead>
             <tr>
                 <th>Sale ID</th>
@@ -29,13 +29,13 @@ $sales = mysqli_query($conn, "
             </tr>
         </thead>
         <tbody>
-            <?php while ($row = mysqli_fetch_assoc($sales)): ?>
+            <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
             <tr>
-                <td><?= $row['id'] ?></td>
+                <td><?= htmlspecialchars($row['id']) ?></td>
                 <td><?= htmlspecialchars($row['name']) ?></td>
                 <td><?= number_format($row['total_amount'], 2) ?></td>
-                <td><?= $row['sale_date'] ?></td>
-                <td><a href="receipt.php?id=<?= $row['id'] ?>">View</a></td>
+                <td><?= htmlspecialchars($row['sale_date']) ?></td>
+                <td><a href="receipt.php?id=<?= urlencode($row['id']) ?>">View</a></td>
             </tr>
             <?php endwhile; ?>
         </tbody>

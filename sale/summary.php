@@ -1,16 +1,16 @@
 <?php
-include('../includes/db.php');
+include('../includes/db_connect.php');
 
-// Daily summary
-$daily = mysqli_query($conn, "
+// Daily summary query
+$dailyStmt = $pdo->query("
     SELECT DATE(sale_date) as day, COUNT(*) as total_sales, SUM(total_amount) as revenue
     FROM sales
     GROUP BY day
     ORDER BY day DESC
 ");
 
-// Best sellers
-$top = mysqli_query($conn, "
+// Best sellers query
+$topStmt = $pdo->query("
     SELECT p.product_name, SUM(si.quantity) as total_sold
     FROM sale_items si
     JOIN products p ON si.product_id = p.id
@@ -38,11 +38,11 @@ $top = mysqli_query($conn, "
             <tr><th>Date</th><th>Total Sales</th><th>Revenue</th></tr>
         </thead>
         <tbody>
-            <?php while ($row = mysqli_fetch_assoc($daily)): ?>
+            <?php while ($row = $dailyStmt->fetch(PDO::FETCH_ASSOC)): ?>
             <tr>
-                <td><?= $row['day'] ?></td>
-                <td><?= $row['total_sales'] ?></td>
-                <td><?= number_format($row['revenue'], 2) ?></td>
+                <td><?= htmlspecialchars($row['day']) ?></td>
+                <td><?= (int)$row['total_sales'] ?></td>
+                <td><?= number_format((float)$row['revenue'], 2) ?></td>
             </tr>
             <?php endwhile; ?>
         </tbody>
@@ -54,10 +54,10 @@ $top = mysqli_query($conn, "
             <tr><th>Product</th><th>Units Sold</th></tr>
         </thead>
         <tbody>
-            <?php while ($row = mysqli_fetch_assoc($top)): ?>
+            <?php while ($row = $topStmt->fetch(PDO::FETCH_ASSOC)): ?>
             <tr>
-                <td><?= $row['product_name'] ?></td>
-                <td><?= $row['total_sold'] ?></td>
+                <td><?= htmlspecialchars($row['product_name']) ?></td>
+                <td><?= (int)$row['total_sold'] ?></td>
             </tr>
             <?php endwhile; ?>
         </tbody>

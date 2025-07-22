@@ -1,10 +1,15 @@
 <?php
-include('../includes/db.php');
+include('../includes/db_connect.php'); // This defines $pdo
 include('../includes/header.php');
 
-
-// Fetch products from DB
-$products = mysqli_query($conn, "SELECT * FROM products ORDER BY product_name ASC");
+// Fetch products from DB using PDO
+try {
+    $stmt = $pdo->query("SELECT * FROM products ORDER BY product_name ASC");
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Fetch products failed: " . $e->getMessage());
+    die("Could not load products.");
+}
 ?>
 
 <!DOCTYPE html>
@@ -128,13 +133,14 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY product_name AS
         <button type="submit" class="btn submit-btn">Submit Sale</button>
     </form>
 
-
     <script>
         <?php
-        // Output products to JavaScript
+        // Pass PHP products array to JS
         echo "productData = {";
-        while ($p = mysqli_fetch_assoc($products)) {
-            echo "'{$p['id']}': {name: '" . addslashes($p['product_name']) . "', price: {$p['price']}},";
+        foreach ($products as $p) {
+            $name = addslashes($p['product_name']);
+            $price = (float) $p['price'];
+            echo "'{$p['id']}': {name: '{$name}', price: {$price}},";
         }
         echo "};";
         ?>

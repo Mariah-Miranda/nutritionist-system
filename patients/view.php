@@ -1,5 +1,5 @@
 <?php
-// patients/view.php
+// view.php
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db_connect.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -27,7 +27,7 @@ $patient_id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
 if (!$patient_id) {
     $message = "Invalid patient ID provided.";
     // Redirect back to patient list if no valid ID
-    header('Location: ' . BASE_URL . 'patients/list.php?message=' . urlencode($message));
+    header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
     exit();
 }
 
@@ -40,7 +40,7 @@ try {
 
     if (!$patient) {
         $message = "Patient not found.";
-        header('Location: ' . BASE_URL . 'patients/list.php?message=' . urlencode($message));
+        header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
         exit();
     }
 
@@ -68,7 +68,7 @@ try {
 } catch (PDOException $e) {
     error_log("Error fetching patient details: " . $e->getMessage());
     $message = "Error loading patient profile. Please try again later.";
-    header('Location: ' . BASE_URL . 'patients/list.php?message=' . urlencode($message));
+    header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
     exit();
 }
 
@@ -80,11 +80,11 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800"><?php echo htmlspecialchars($patient['full_name']); ?>'s Profile</h2>
         <div class="flex space-x-3">
-            <a href="<?php echo BASE_URL; ?>patients/edit.php?id=<?php echo $patient['patient_id']; ?>" class="btn-secondary flex items-center space-x-2">
+            <a href="<?php echo BASE_URL; ?>edit.php?id=<?php echo $patient['patient_id']; ?>" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
                 <i class="fas fa-edit"></i>
                 <span>Edit Patient</span>
             </a>
-            <a href="<?php echo BASE_URL; ?>patients/add.php" class="btn-primary flex items-center space-x-2">
+            <a href="<?php echo BASE_URL; ?>add.php" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md">
                 <i class="fas fa-plus"></i>
                 <span>Add New Patient</span>
             </a>
@@ -92,7 +92,7 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 
     <?php if ($message): ?>
-        <div class="message <?php echo strpos($message, 'successfully') !== false ? 'success' : 'error'; ?> mb-4">
+        <div class="bg-<?php echo strpos($message, 'successfully') !== false ? 'green' : 'red'; ?>-100 border-l-4 border-<?php echo strpos($message, 'successfully') !== false ? 'green' : 'red'; ?>-500 text-<?php echo strpos($message, 'successfully') !== false ? 'green' : 'red'; ?>-700 p-4 mb-6 rounded" role="alert">
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
@@ -111,24 +111,24 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Patient Details Card -->
-        <div class="md:col-span-2 bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Personal Information</h3>
-            <div class="grid grid-cols-2 gap-y-3 gap-x-6 text-gray-700">
-                <div><strong>Patient ID:</strong> <?php echo htmlspecialchars($patient['patient_unique_id']); ?></div>
-                <div><strong>Date of Birth:</strong> <?php echo htmlspecialchars($patient['date_of_birth'] ?? 'N/A'); ?></div>
-                <div><strong>Age:</strong> <?php echo htmlspecialchars(calculateAgeFromDob($patient['date_of_birth']) ?? 'N/A'); ?></div>
-                <div><strong>Gender:</strong> <?php echo htmlspecialchars($patient['gender'] ?? 'N/A'); ?></div>
-                <div><strong>Height:</strong> <?php echo htmlspecialchars($patient['height_cm'] ?? 'N/A'); ?> cm</div>
-                <div><strong>Email:</strong> <?php echo htmlspecialchars($patient['email'] ?? 'N/A'); ?></div>
-                <div><strong>Phone:</strong> <?php echo htmlspecialchars($patient['phone'] ?? 'N/A'); ?></div>
-                <div class="col-span-2"><strong>Address:</strong> <?php echo nl2br(htmlspecialchars($patient['address'] ?? 'N/A')); ?></div>
-                <div class="col-span-2"><strong>Health Conditions:</strong> <?php echo nl2br(htmlspecialchars($patient['health_conditions'] ?? 'N/A')); ?></div>
+        <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Personal Information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-gray-700">
+                <div><strong>Patient ID:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['patient_unique_id']); ?></span></div>
+                <div><strong>Date of Birth:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['date_of_birth'] ?? 'N/A'); ?></span></div>
+                <div><strong>Age:</strong> <span class="text-gray-900"><?php echo htmlspecialchars(calculateAgeFromDob($patient['date_of_birth']) ?? 'N/A'); ?></span></div>
+                <div><strong>Gender:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['gender'] ?? 'N/A'); ?></span></div>
+                <div><strong>Email:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['email'] ?? 'N/A'); ?></span></div>
+                <div><strong>Phone:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['phone'] ?? 'N/A'); ?></span></div>
+                <div class="col-span-full"><strong>Address:</strong> <span class="text-gray-900"><?php echo nl2br(htmlspecialchars($patient['address'] ?? 'N/A')); ?></span></div>
+                <div class="col-span-full"><strong>Health Conditions:</strong> <span class="text-gray-900"><?php echo nl2br(htmlspecialchars($patient['health_conditions'] ?? 'N/A')); ?></span></div>
                 <div><strong>Membership:</strong>
-                    <span class="status-badge <?php
-                        if ($patient['membership_status'] === 'Premium') echo 'bg-green-100 text-green-800';
-                        else if ($patient['membership_status'] === 'Standard') echo 'bg-blue-100 text-blue-800';
-                        else echo 'bg-gray-100 text-gray-800';
-                    ?>">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                        <?php
+                            if ($patient['membership_status'] === 'Premium') echo 'bg-green-100 text-green-800';
+                            else if ($patient['membership_status'] === 'Standard') echo 'bg-blue-100 text-blue-800';
+                            else echo 'bg-gray-100 text-gray-800';
+                        ?>">
                         <?php echo htmlspecialchars($patient['membership_status']); ?>
                     </span>
                 </div>
@@ -136,13 +136,14 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
 
         <!-- Latest Health Metrics Card -->
-        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Latest Health Metrics</h3>
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Latest Health Metrics</h3>
             <?php if ($latestMetrics): ?>
                 <div class="space-y-3 text-gray-700">
-                    <p><strong>Recorded On:</strong> <?php echo htmlspecialchars(date('Y-m-d H:i', strtotime($latestMetrics['record_date']))); ?></p>
-                    <p><strong>Weight:</strong> <?php echo htmlspecialchars($latestMetrics['weight_kg'] ?? 'N/A'); ?> kg</p>
-                    <p><strong>BMI:</strong> <?php echo htmlspecialchars($latestMetrics['bmi'] ?? 'N/A'); ?>
+                    <p><strong>Recorded On:</strong> <span class="text-gray-900"><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime($latestMetrics['record_date']))); ?></span></p>
+                    <p><strong>Height:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($latestMetrics['height_cm'] ?? 'N/A'); ?> cm</span></p>
+                    <p><strong>Weight:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($latestMetrics['weight_kg'] ?? 'N/A'); ?> kg</span></p>
+                    <p><strong>BMI:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($latestMetrics['bmi'] ?? 'N/A'); ?></span>
                         <?php
                         // Display BMI status
                         $bmi = $latestMetrics['bmi'];
@@ -157,7 +158,7 @@ require_once __DIR__ . '/../includes/header.php';
                         }
                         ?>
                     </p>
-                    <p><strong>Blood Pressure:</strong> <?php echo htmlspecialchars($latestMetrics['systolic_bp'] ?? 'N/A'); ?>/<?php echo htmlspecialchars($latestMetrics['diastolic_bp'] ?? 'N/A'); ?> mmHg
+                    <p><strong>Blood Pressure:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($latestMetrics['systolic_bp'] ?? 'N/A'); ?>/<?php echo htmlspecialchars($latestMetrics['diastolic_bp'] ?? 'N/A'); ?> mmHg</span>
                         <?php
                         // Display BP status
                         $systolic = $latestMetrics['systolic_bp'];
@@ -172,7 +173,7 @@ require_once __DIR__ . '/../includes/header.php';
                         }
                         ?>
                     </p>
-                    <p><strong>Blood Sugar:</strong> <?php echo htmlspecialchars($latestMetrics['blood_sugar_level_mg_dL'] ?? 'N/A'); ?> mg/dL
+                    <p><strong>Blood Sugar:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($latestMetrics['blood_sugar_level_mg_dL'] ?? 'N/A'); ?> mg/dL</span>
                         <?php
                         // Display BS status
                         $bloodSugar = $latestMetrics['blood_sugar_level_mg_dL'];
@@ -195,7 +196,7 @@ require_once __DIR__ . '/../includes/header.php';
                         }
                         ?>
                     </p>
-                    <p><strong>Fasting Status:</strong> <?php echo htmlspecialchars($latestMetrics['blood_sugar_fasting_status'] ?? 'N/A'); ?></p>
+                    <p><strong>Fasting Status:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($latestMetrics['blood_sugar_fasting_status'] ?? 'N/A'); ?></span></p>
                 </div>
             <?php else: ?>
                 <p class="text-gray-600">No health metrics recorded for this patient yet.</p>
@@ -203,12 +204,12 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     </div>
 
-    <!-- Patient Analytics Section (Placeholder for now) -->
-    <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Patient Progress & Analytics</h3>
+    <!-- Patient Analytics Section -->
+    <div class="mt-8 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Patient Progress & Analytics</h3>
         <p class="text-gray-600">
             This section will display charts and detailed analytics for the patient's health progress over time.
-            <a href="<?php echo BASE_URL; ?>patients/view/analytics.php?id=<?php echo $patient['patient_id']; ?>" class="text-blue-500 hover:underline">View detailed analytics</a>.
+            <a href="<?php echo BASE_URL; ?>view/analytics.php?id=<?php echo $patient['patient_id']; ?>" class="text-blue-600 hover:underline">View detailed analytics</a>.
         </p>
         <!-- Data for JS charts will be passed here or fetched via AJAX -->
         <script>
@@ -222,8 +223,8 @@ require_once __DIR__ . '/../includes/header.php';
 
     <!-- Back to List Button -->
     <div class="mt-8 text-center">
-        <a href="<?php echo BASE_URL; ?>patients/list.php" class="btn-secondary">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Patient List
+        <a href="<?php echo BASE_URL; ?>list.php" class="inline-flex items-center space-x-2 px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">
+            <i class="fas fa-arrow-left"></i> Back to Patient List
         </a>
     </div>
 

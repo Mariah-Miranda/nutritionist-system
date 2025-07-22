@@ -6,7 +6,7 @@ define('DB_USER', 'root'); // Your MySQL username (e.g., 'root')
 define('DB_PASS', ''); // Your MySQL password (often empty for 'root' on local setups, but use a strong one in production)
 
 // Other system configurations (from system_settings table, but defaults here)
-define('SITE_NAME', 'Nutritionist System');
+define('SITE_NAME', 'Smart Food');
 define('DEFAULT_CURRENCY', 'UGX');
 define('TAX_RATE_PERCENT', 8); // Example default, will be fetched from DB later
 define('BASE_URL', '');

@@ -113,11 +113,11 @@ try {
                 </a>
             </div>
             <div class="flex space-x-3">
-                <a href="<?php echo BASE_URL; ?>appointments/calendar.php" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2">
+                <a href="<?php echo BASE_URL; ?>calendar.php" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Calendar View</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>appointments/schedule.php" class="px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2">
+                <a href="<?php echo BASE_URL; ?>schedule.php" class="px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2">
                     <i class="fas fa-plus"></i>
                     <span>Schedule Appointment</span>
                 </a>

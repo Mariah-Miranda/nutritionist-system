@@ -56,7 +56,7 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>../appointments/today.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../appointments/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-calendar-alt text-xl"></i>
                             <span class="text-lg">Appointments</span>
                         </a>
@@ -74,7 +74,7 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>../admin/reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../admin/reports/report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-chart-line text-xl"></i>
                             <span class="text-lg">Analytics</span>
                         </a>

@@ -64,7 +64,12 @@ form.form-box button {
   background-color: var(--primary-color);
   color: #fff;
   border: none;
+<<<<<<< Updated upstream
   padding: 10px 20px;
+=======
+  /* Increased padding for form buttons */
+  padding: 12px 24px; /* Increased from 10px 20px */
+>>>>>>> Stashed changes
   font-size: 14px;
   cursor: pointer;
   border-radius: 5px;
@@ -75,7 +80,13 @@ form.form-box .btn-cancel {
   color: #888;
   text-decoration: none;
 }
+<<<<<<< Updated upstream
 
+=======
+.form-group .option .span{
+padding: 10px;
+}
+>>>>>>> Stashed changes
 /* Table Styles */
 table {
   width: 100%;
@@ -223,7 +234,11 @@ thead {
     text-align: center;
   }
 
+<<<<<<< Updated upstream
   .sales-index-table th, 
+=======
+  .sales-index-table th,
+>>>>>>> Stashed changes
   .sales-index-table td {
     padding: 10px 8px;
     font-size: 0.9rem;
@@ -305,7 +320,12 @@ form.sale-form button {
   background-color: #198754;
   color: white;
   border: none;
+<<<<<<< Updated upstream
   padding: 10px 20px;
+=======
+  /* Increased padding for sale form buttons */
+  padding: 12px 24px; /* Increased from 10px 20px */
+>>>>>>> Stashed changes
   font-size: 15px;
   border-radius: 6px;
   cursor: pointer;
@@ -327,6 +347,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Links */
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
 a:hover {
@@ -334,13 +355,16 @@ a:hover {
     text-decoration: underline;
 }
 >>>>>>> a3343cdef5e9f699bd6d1b8ff66d4c9a421eb927
+=======
+>>>>>>> Stashed changes
 
 /* Buttons - basic styles, further styled by Tailwind or specific CSS */
 button, .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1.25rem;
+    /* Increased padding for general buttons */
+    padding: 1rem 1.5rem; /* Increased from 0.75rem 1.25rem */
     border-radius: 0.5rem;
     font-weight: 500;
     cursor: pointer;

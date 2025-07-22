@@ -1,65 +1,74 @@
 <?php
-// admin/index.php
-require_once __DIR__ . '/../config.php'; // Includes session_start()
-require_once __DIR__ . '/../includes/db_connect.php'; // Establishes $pdo connection
-require_once __DIR__ . '/../includes/auth.php'; // Includes authentication functions
+// index.php - Main Dashboard
 
-// Set the page title for the header
-$pageTitle = "Admin Dashboard";
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../includes/db_connect.php'; // This provides $pdo
+require_once __DIR__ . '/../includes/auth.php';
 
-// Require login for this page
-requireLogin();
+// Include header
+$pageTitle = "Dashboard";
+include_once __DIR__ . '/../includes/header.php';
 
-// Optional: Check for specific roles if this dashboard is only for admins
-// if (!hasRole('Admin')) {
-//     header('Location: ' . BASE_URL . 'index.php?message=Access denied. You do not have permission to view this page.');
-//     exit();
-// }
+requireLogin(); // Ensure user is logged in
 
-// User is logged in and authorized
-$userName = $_SESSION['full_name'] ?? 'User';
-$userRole = $_SESSION['role'] ?? 'Unknown Role';
+// Fetch counts for dashboard summary using PDO
+$totalPatients = 0;
+$totalAppointments = 0;
+$totalProducts = 0;
 
-// Include the header (which contains the opening <html>, <head>, <body> and navigation)
-require_once __DIR__ . '/../includes/header.php';
+try {
+    // Get total patients
+    $sqlPatients = "SELECT COUNT(*) AS total FROM patients";
+    $stmtPatients = $pdo->query($sqlPatients);
+    $totalPatients = $stmtPatients->fetchColumn();
+
+    // Get total appointments (scheduled or completed)
+    $sqlAppointments = "SELECT COUNT(*) AS total FROM appointments WHERE status IN ('Scheduled', 'Completed')";
+    $stmtAppointments = $pdo->query($sqlAppointments);
+    $totalAppointments = $stmtAppointments->fetchColumn();
+
+    // Get total products
+    $sqlProducts = "SELECT COUNT(*) AS total FROM products";
+    $stmtProducts = $pdo->query($sqlProducts);
+    $totalProducts = $stmtProducts->fetchColumn();
+
+} catch (PDOException $e) {
+    error_log("ERROR: Could not fetch dashboard counts in index.php: " . $e->getMessage());
+    echo "<p class='text-red-500'>Error fetching dashboard data. Please try again.</p>";
+}
 ?>
 
-<!-- Main content for the Admin Dashboard page -->
-<div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Dashboard Overview</h2>
-    <p class="text-lg mb-2">Welcome, <span class="font-semibold text-blue-600"><?php echo htmlspecialchars($userName); ?></span>!</p>
-    <p class="text-md text-gray-600">Your role: <span class="font-medium text-purple-600"><?php echo htmlspecialchars($userRole); ?></span></p>
-
-    <p class="mt-6 text-gray-700">This is your main administrative dashboard. Here you will find summaries and quick links to manage the system.</p>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-        <!-- Example Dashboard Cards -->
-        <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
-            <h3 class="text-xl font-semibold text-blue-800 mb-2">Total Patients</h3>
-            <p class="text-3xl font-bold text-blue-600">120</p>
-            <p class="text-sm text-gray-500 mt-2">View all registered patients.</p>
-            <a href="<?php echo BASE_URL; ?>patients/list.php" class="text-blue-500 hover:underline text-sm mt-3 block">Go to Patients <i class="fas fa-arrow-right text-xs ml-1"></i></a>
-        </div>
-
-        <div class="bg-green-50 p-6 rounded-lg shadow-sm border border-green-200">
-            <h3 class="text-xl font-semibold text-green-800 mb-2">Upcoming Appointments</h3>
-            <p class="text-3xl font-bold text-green-600">5</p>
-            <p class="text-sm text-gray-500 mt-2">Appointments in the next 7 days.</p>
-            <a href="<?php echo BASE_URL; ?>appointments/upcoming.php" class="text-green-500 hover:underline text-sm mt-3 block">View Appointments <i class="fas fa-arrow-right text-xs ml-1"></i></a>
-        </div>
-
-        <div class="bg-yellow-50 p-6 rounded-lg shadow-sm border border-yellow-200">
-            <h3 class="text-xl font-semibold text-yellow-800 mb-2">Products in Stock</h3>
-            <p class="text-3xl font-bold text-yellow-600">85</p>
-            <p class="text-sm text-gray-500 mt-2">Total quantity across all products.</p>
-            <a href="<?php echo BASE_URL; ?>products/inventory.php" class="text-yellow-500 hover:underline text-sm mt-3 block">Manage Inventory <i class="fas fa-arrow-right text-xs ml-1"></i></a>
-        </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Card 1: Total Patients -->
+    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
+        <div class="text-5xl font-bold text-blue-600 mb-2"><?php echo $totalPatients; ?></div>
+        <div class="text-lg text-gray-600">Total Patients</div>
+        <a href="../patients/list.php" class="mt-4 text-blue-500 hover:underline">View All Patients</a>
     </div>
 
-    <a href="<?php echo BASE_URL; ?>logout.php" class="btn-logout">Logout</a>
+    <!-- Card 2: Total Appointments -->
+    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
+        <div class="text-5xl font-bold text-green-600 mb-2"><?php echo $totalAppointments; ?></div>
+        <div class="text-lg text-gray-600">Total Appointments</div>
+        <a href="../appointments/index.php" class="mt-4 text-green-500 hover:underline">View Appointments</a>
+    </div>
+
+    <!-- Card 3: Total Products -->
+    <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
+        <div class="text-5xl font-bold text-purple-600 mb-2"><?php echo $totalProducts; ?></div>
+        <div class="text-lg text-gray-600">Total Products</div>
+        <a href="../products/index.php" class="mt-4 text-purple-500 hover:underline">View All Products</a>
+    </div>
 </div>
 
-<?php
-// Include the footer (which contains the closing </main>, </div>, </body>, </html>)
-require_once __DIR__ . '/../includes/footer.php';
-?>
+<!-- Quick Links / Recent Activity (Placeholder) -->
+<div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="../patients/add.php" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">Add New Patient</a>
+        <a href="../appointments/schedule.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">Schedule Appointment</a>
+        <a href="../products/add.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">Add New Product</a>
+    </div>
+</div>
+
+<?php include_once __DIR__ . '/../includes/footer.php'; ?>

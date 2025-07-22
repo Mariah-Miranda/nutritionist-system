@@ -1,4 +1,5 @@
 <?php
+<<<<<<< Updated upstream
 include('../includes/db_connect.php'); // This defines $pdo
 include('../includes/header.php');
 
@@ -10,6 +11,16 @@ try {
     error_log("Fetch products failed: " . $e->getMessage());
     die("Could not load products.");
 }
+=======
+    require_once __DIR__ . '/../config.php';
+    require_once __DIR__ . '/../includes/db_connect.php';
+    require_once __DIR__ . '/../includes/auth.php';
+include('../includes/header.php');
+
+
+// Fetch products from DB
+$products = mysqli_query($conn, "SELECT * FROM products ORDER BY product_name ASC");
+>>>>>>> Stashed changes
 ?>
 
 <!DOCTYPE html>
@@ -133,6 +144,7 @@ try {
         <button type="submit" class="btn submit-btn">Submit Sale</button>
     </form>
 
+<<<<<<< Updated upstream
     <script>
         <?php
         // Pass PHP products array to JS
@@ -141,6 +153,15 @@ try {
             $name = addslashes($p['product_name']);
             $price = (float) $p['price'];
             echo "'{$p['id']}': {name: '{$name}', price: {$price}},";
+=======
+
+    <script>
+        <?php
+        // Output products to JavaScript
+        echo "productData = {";
+        while ($p = mysqli_fetch_assoc($products)) {
+            echo "'{$p['id']}': {name: '" . addslashes($p['product_name']) . "', price: {$p['price']}},";
+>>>>>>> Stashed changes
         }
         echo "};";
         ?>

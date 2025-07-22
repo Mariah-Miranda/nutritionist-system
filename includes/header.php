@@ -25,6 +25,7 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo SITE_NAME; ?> - <?php echo $pageTitle ?? 'Dashboard'; ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -56,7 +57,11 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                         </a>
                     </li>
                     <li>
+<<<<<<< Updated upstream
                         <a href="<?php echo BASE_URL; ?>../appointments/today.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+=======
+                        <a href="<?php echo BASE_URL; ?>appointments/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+>>>>>>> Stashed changes
                             <i class="fas fa-calendar-alt text-xl"></i>
                             <span class="text-lg">Appointments</span>
                         </a>
@@ -74,14 +79,22 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                         </a>
                     </li>
                     <li>
+<<<<<<< Updated upstream
                         <a href="<?php echo BASE_URL; ?>../admin/reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+=======
+                        <a href="<?php echo BASE_URL; ?>reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+>>>>>>> Stashed changes
                             <i class="fas fa-chart-line text-xl"></i>
                             <span class="text-lg">Analytics</span>
                         </a>
                     </li>
                     <?php if ($currentUserRole === 'Admin'): // Admin specific link ?>
                     <li>
+<<<<<<< Updated upstream
                         <a href="<?php echo BASE_URL; ?>../admin/settings/users.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+=======
+                        <a href="<?php echo BASE_URL; ?>settings/users.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+>>>>>>> Stashed changes
                             <i class="fas fa-cog text-xl"></i>
                             <span class="text-lg">Admin Settings</span>
                         </a>

@@ -21,7 +21,7 @@ requireLogin();
 // }
 
 $message = '';
-$redirectUrl = BASE_URL . 'patients/add.php'; // Default redirect back to add page on error
+$redirectUrl = BASE_URL . 'add.php'; // Default redirect back to add page on error
 $patient_id_for_redirect = null; // To store the patient_id for redirection
 
 try {

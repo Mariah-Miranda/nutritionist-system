@@ -36,7 +36,7 @@ try {
     if (!$patient) {
         $message = "Patient not found.";
         $_SESSION['error_message'] = $message;
-        header('Location: ' . BASE_URL . 'patients/list.php'); // Redirect to patient list
+        header('Location: . ' . BASE_URL . 'patients/list.php'); // Redirect to patient list
         exit();
     }
 
@@ -185,7 +185,7 @@ require_once __DIR__ . '/../../includes/header.php';
             <!-- Individual Patient Progress Chart -->
             <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Individual Patient Progress - BMI</h3>
-                <canvas id="bmiChart"></canvas>
+                <canvas id="bmiChart" class="h-80"></canvas>
             </div>
 
             <!-- Health Outcomes Progress Bars -->
@@ -237,30 +237,42 @@ require_once __DIR__ . '/../../includes/header.php';
             <!-- Weight Trends Chart -->
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Weight Trends</h3>
-                <canvas id="weightChart"></canvas>
+                <canvas id="weightChart" class="h-80"></canvas>
             </div>
 
             <!-- Blood Pressure Chart -->
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Blood Pressure Trends</h3>
-                <canvas id="bpChart"></canvas>
+                <canvas id="bpChart" class="h-80"></canvas>
             </div>
 
             <!-- Blood Sugar Chart -->
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 lg:col-span-2">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Blood Sugar Trends</h3>
-                <canvas id="bloodSugarChart"></canvas>
+                <canvas id="bloodSugarChart" class="h-80"></canvas>
             </div>
         </div>
     <?php endif; ?>
 </div>
 
 <script>
+// Declare chart instances in a broader scope to allow destruction
+let bmiChartInstance = null;
+let weightChartInstance = null;
+let bpChartInstance = null;
+let bloodSugarChartInstance = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     const healthMetricsData = <?php echo json_encode($allHealthMetrics); ?>;
 
+    // Destroy existing charts if they exist before processing new data
+    if (bmiChartInstance) bmiChartInstance.destroy();
+    if (weightChartInstance) weightChartInstance.destroy();
+    if (bpChartInstance) bpChartInstance.destroy();
+    if (bloodSugarChartInstance) bloodSugarChartInstance.destroy();
+
     if (healthMetricsData.length === 0) {
-        return; // No data to chart
+        return; // No data to chart, and existing charts are destroyed
     }
 
     // Prepare data for charts
@@ -273,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- BMI Chart (Main Progress Chart) ---
     const bmiCtx = document.getElementById('bmiChart').getContext('2d');
-    new Chart(bmiCtx, {
+    bmiChartInstance = new Chart(bmiCtx, {
         type: 'line',
         data: {
             labels: labels,
@@ -347,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Weight Chart ---
     const weightCtx = document.getElementById('weightChart').getContext('2d');
-    new Chart(weightCtx, {
+    weightChartInstance = new Chart(weightCtx, {
         type: 'line',
         data: {
             labels: labels,
@@ -421,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Blood Pressure Chart ---
     const bpCtx = document.getElementById('bpChart').getContext('2d');
-    new Chart(bpCtx, {
+    bpChartInstance = new Chart(bpCtx, {
         type: 'line',
         data: {
             labels: labels,
@@ -507,7 +519,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Blood Sugar Chart ---
     const bloodSugarCtx = document.getElementById('bloodSugarChart').getContext('2d');
-    new Chart(bloodSugarCtx, {
+    bloodSugarChartInstance = new Chart(bloodSugarCtx, {
         type: 'line',
         data: {
             labels: labels,

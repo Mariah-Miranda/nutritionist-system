@@ -1,11 +1,14 @@
 <?php
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php');
 
 // Run query using PDO
 $stmt = $pdo->query("
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
@@ -14,6 +17,9 @@ $stmt = $pdo->query("
 // Query using 'clients' and 'clients_id' as per your database
 $sales = mysqli_query($conn, "
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -34,7 +40,11 @@ $sales = mysqli_query($conn, "
     <h2>Sales History</h2>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <table>
+=======
+  <table>
+>>>>>>> Stashed changes
 =======
   <table>
 >>>>>>> Stashed changes
@@ -53,6 +63,7 @@ $sales = mysqli_query($conn, "
         <tbody>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
             <tr>
                 <td><?= htmlspecialchars($row['id']) ?></td>
@@ -63,6 +74,8 @@ $sales = mysqli_query($conn, "
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
             <?php while ($row = mysqli_fetch_assoc($sales)): ?>
             <tr>
                 <td><?= $row['id'] ?></td>
@@ -71,6 +84,9 @@ $sales = mysqli_query($conn, "
                 <td><?= $row['sale_date'] ?></td>
                 <td><a href="receipt.php?id=<?= $row['id'] ?>">View</a></td>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

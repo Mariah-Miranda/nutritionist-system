@@ -1,6 +1,7 @@
 <?php
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php');
 
 
@@ -29,6 +30,8 @@ $items = $stmt->fetchAll();
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
     require_once __DIR__ . '/../includes/db_connect.php';
     require_once __DIR__ . '/../includes/auth.php';
@@ -48,6 +51,9 @@ $items = mysqli_query($conn, "
     WHERE si.sale_id = $id
 ");
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -58,6 +64,7 @@ $items = mysqli_query($conn, "
 <head>
     <title>Receipt</title>
     <style>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     body {
@@ -146,6 +153,8 @@ $items = mysqli_query($conn, "
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
         body { font-family: Arial; padding: 20px; }
         table { border-collapse: collapse; width: 100%; }
         th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
@@ -157,6 +166,9 @@ $items = mysqli_query($conn, "
     <p><strong>Membership:</strong> <?= $sale['membership'] ?></p>
     <p><strong>Sale Date:</strong> <?= $sale['sale_date'] ?></p>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -164,6 +176,7 @@ $items = mysqli_query($conn, "
     <table>
         <thead>
             <tr>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 <th style="text-align:left;">Item</th>
@@ -237,6 +250,8 @@ $items = mysqli_query($conn, "
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                 <th>Product</th>
                 <th>Qty</th>
                 <th>Price</th>
@@ -261,6 +276,9 @@ $items = mysqli_query($conn, "
 
     <button onclick="window.print()">Print Receipt</button>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

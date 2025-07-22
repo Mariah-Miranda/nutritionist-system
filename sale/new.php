@@ -1,6 +1,7 @@
 <?php
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php'); // This defines $pdo
 include('../includes/header.php');
 
@@ -15,6 +16,8 @@ try {
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
     require_once __DIR__ . '/../includes/db_connect.php';
     require_once __DIR__ . '/../includes/auth.php';
@@ -24,6 +27,9 @@ include('../includes/header.php');
 // Fetch products from DB
 $products = mysqli_query($conn, "SELECT * FROM products ORDER BY product_name ASC");
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -152,6 +158,7 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY product_name AS
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <script>
         <?php
         // Pass PHP products array to JS
@@ -163,6 +170,8 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY product_name AS
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
     <script>
         <?php
@@ -171,6 +180,9 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY product_name AS
         while ($p = mysqli_fetch_assoc($products)) {
             echo "'{$p['id']}': {name: '" . addslashes($p['product_name']) . "', price: {$p['price']}},";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

@@ -59,7 +59,11 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                     <li>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <a href="<?php echo BASE_URL; ?>../appointments/today.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+=======
+                        <a href="<?php echo BASE_URL; ?>appointments/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+>>>>>>> Stashed changes
 =======
                         <a href="<?php echo BASE_URL; ?>appointments/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
 >>>>>>> Stashed changes
@@ -85,7 +89,11 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                     <li>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <a href="<?php echo BASE_URL; ?>../admin/reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+=======
+                        <a href="<?php echo BASE_URL; ?>reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+>>>>>>> Stashed changes
 =======
                         <a href="<?php echo BASE_URL; ?>reports/sales_report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
 >>>>>>> Stashed changes
@@ -100,7 +108,11 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                     <li>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <a href="<?php echo BASE_URL; ?>../admin/settings/users.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+=======
+                        <a href="<?php echo BASE_URL; ?>settings/users.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+>>>>>>> Stashed changes
 =======
                         <a href="<?php echo BASE_URL; ?>settings/users.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
 >>>>>>> Stashed changes

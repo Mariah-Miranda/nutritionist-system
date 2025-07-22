@@ -1,11 +1,14 @@
 <?php
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php');
 
 // Daily summary query
 $dailyStmt = $pdo->query("
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
@@ -15,6 +18,9 @@ $dailyStmt = $pdo->query("
 // Daily summary
 $daily = mysqli_query($conn, "
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -26,8 +32,13 @@ $daily = mysqli_query($conn, "
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 // Best sellers query
 $topStmt = $pdo->query("
+=======
+// Best sellers
+$top = mysqli_query($conn, "
+>>>>>>> Stashed changes
 =======
 // Best sellers
 $top = mysqli_query($conn, "
@@ -65,6 +76,7 @@ $top = mysqli_query($conn, "
         <tbody>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <?php while ($row = $dailyStmt->fetch(PDO::FETCH_ASSOC)): ?>
             <tr>
                 <td><?= htmlspecialchars($row['day']) ?></td>
@@ -73,12 +85,17 @@ $top = mysqli_query($conn, "
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
             <?php while ($row = mysqli_fetch_assoc($daily)): ?>
             <tr>
                 <td><?= $row['day'] ?></td>
                 <td><?= $row['total_sales'] ?></td>
                 <td><?= number_format($row['revenue'], 2) ?></td>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -95,6 +112,7 @@ $top = mysqli_query($conn, "
         <tbody>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <?php while ($row = $topStmt->fetch(PDO::FETCH_ASSOC)): ?>
             <tr>
                 <td><?= htmlspecialchars($row['product_name']) ?></td>
@@ -102,11 +120,16 @@ $top = mysqli_query($conn, "
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
             <?php while ($row = mysqli_fetch_assoc($top)): ?>
             <tr>
                 <td><?= $row['product_name'] ?></td>
                 <td><?= $row['total_sold'] ?></td>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

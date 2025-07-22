@@ -11,7 +11,11 @@ define('DEFAULT_CURRENCY', 'UGX');
 define('TAX_RATE_PERCENT', 8); // Example default, will be fetched from DB later
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 define('BASE_URL', '');
+=======
+define('BASE_URL', '/nutrition-system/');
+>>>>>>> Stashed changes
 =======
 define('BASE_URL', '/nutrition-system/');
 >>>>>>> Stashed changes

@@ -1,5 +1,6 @@
 <?php
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php');
 
 $today = date('Y-m-d');
@@ -21,6 +22,8 @@ $totalCustomers = $stmt->fetchColumn();
 $stmt = $pdo->query("SELECT COUNT(*) as total FROM products");
 $totalProducts = $stmt->fetchColumn();
 =======
+=======
+>>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
     require_once __DIR__ . '/../includes/db_connect.php';
     require_once __DIR__ . '/../includes/auth.php';
@@ -39,6 +42,9 @@ $totalCustomers = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
 
 // Get product count
 $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM products"))['total'];
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 ?>
 
@@ -47,7 +53,11 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
 <head>
     <title>Sales Dashboard</title>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <link rel="stylesheet" href="../assets/css/style.css">
+=======
+   <link rel="stylesheet" href="../assets/css/style.css">
+>>>>>>> Stashed changes
 =======
    <link rel="stylesheet" href="../assets/css/style.css">
 >>>>>>> Stashed changes
@@ -59,7 +69,11 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
         <h1 class="sales-index-title">Sales Dashboard</h1>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <!-- Navigation buttons -->
+=======
+                <!-- Navigation buttons -->
+>>>>>>> Stashed changes
 =======
                 <!-- Navigation buttons -->
 >>>>>>> Stashed changes
@@ -70,6 +84,10 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
         </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -86,6 +104,7 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
                     <tr>
                         <td>Sales Made Today</td>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <td><?= (int)($todayStats['sales_count'] ?? 0) ?></td>
                     </tr>
                     <tr>
@@ -100,6 +119,8 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
                         <td>Products Available</td>
                         <td><?= (int)$totalProducts ?></td>
 =======
+=======
+>>>>>>> Stashed changes
                         <td><?= $todayStats['sales_count'] ?? 0 ?></td>
                     </tr>
                     <tr>
@@ -113,6 +134,9 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
                     <tr>
                         <td>Products Available</td>
                         <td><?= $totalProducts ?></td>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                     </tr>
                 </tbody>
@@ -120,6 +144,10 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
         </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes

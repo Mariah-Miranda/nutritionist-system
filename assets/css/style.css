@@ -65,7 +65,12 @@ form.form-box button {
   color: #fff;
   border: none;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   padding: 10px 20px;
+=======
+  /* Increased padding for form buttons */
+  padding: 12px 24px; /* Increased from 10px 20px */
+>>>>>>> Stashed changes
 =======
   /* Increased padding for form buttons */
   padding: 12px 24px; /* Increased from 10px 20px */
@@ -81,7 +86,13 @@ form.form-box .btn-cancel {
   text-decoration: none;
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+.form-group .option .span{
+padding: 10px;
+}
+>>>>>>> Stashed changes
 =======
 .form-group .option .span{
 padding: 10px;
@@ -235,7 +246,11 @@ thead {
   }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   .sales-index-table th, 
+=======
+  .sales-index-table th,
+>>>>>>> Stashed changes
 =======
   .sales-index-table th,
 >>>>>>> Stashed changes
@@ -321,7 +336,12 @@ form.sale-form button {
   color: white;
   border: none;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   padding: 10px 20px;
+=======
+  /* Increased padding for sale form buttons */
+  padding: 12px 24px; /* Increased from 10px 20px */
+>>>>>>> Stashed changes
 =======
   /* Increased padding for sale form buttons */
   padding: 12px 24px; /* Increased from 10px 20px */
@@ -348,6 +368,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Links */
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
 a:hover {
@@ -355,6 +376,8 @@ a:hover {
     text-decoration: underline;
 }
 >>>>>>> a3343cdef5e9f699bd6d1b8ff66d4c9a421eb927
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 

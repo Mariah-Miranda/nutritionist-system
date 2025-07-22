@@ -1,13 +1,19 @@
 <?php
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php');
 
 =======
+=======
+>>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
     require_once __DIR__ . '/../includes/db_connect.php';
     require_once __DIR__ . '/../includes/auth.php';
 
 // Collect form data
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 $name = $_POST['name'];
 $phone = $_POST['phone'];
@@ -15,6 +21,7 @@ $membership = $_POST['membership'];
 $product_ids = $_POST['product_ids'];
 $quantities = $_POST['quantities'];
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 try {
     $pdo->beginTransaction();
@@ -89,6 +96,8 @@ try {
     die("<h1>Error: " . $e->getMessage() . "</h1>");
 }
 =======
+=======
+>>>>>>> Stashed changes
 // Find or insert customer
 $check = mysqli_query($conn, "SELECT id FROM customers WHERE name = '$name' AND phone = '$phone' LIMIT 1");
 if (mysqli_num_rows($check) > 0) {
@@ -139,4 +148,7 @@ foreach ($items as $item) {
 header("Location: receipt.php?id=$sale_id");
 exit;
 ?>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

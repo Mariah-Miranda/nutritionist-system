@@ -1,5 +1,6 @@
 <?php
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php');
 
 
@@ -26,6 +27,8 @@ $stmt = $pdo->prepare("
 $stmt->execute([$id]);
 $items = $stmt->fetchAll();
 =======
+=======
+>>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
     require_once __DIR__ . '/../includes/db_connect.php';
     require_once __DIR__ . '/../includes/auth.php';
@@ -44,6 +47,9 @@ $items = mysqli_query($conn, "
     JOIN products p ON si.product_id = p.id
     WHERE si.sale_id = $id
 ");
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 ?>
 
@@ -52,6 +58,7 @@ $items = mysqli_query($conn, "
 <head>
     <title>Receipt</title>
     <style>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     body {
         font-family: 'Courier New', monospace;
@@ -137,6 +144,8 @@ $items = mysqli_query($conn, "
 
     <div class="line"></div>
 =======
+=======
+>>>>>>> Stashed changes
         body { font-family: Arial; padding: 20px; }
         table { border-collapse: collapse; width: 100%; }
         th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
@@ -147,11 +156,15 @@ $items = mysqli_query($conn, "
     <p><strong>Client:</strong> <?= $sale['name'] ?> (<?= $sale['phone'] ?>)</p>
     <p><strong>Membership:</strong> <?= $sale['membership'] ?></p>
     <p><strong>Sale Date:</strong> <?= $sale['sale_date'] ?></p>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     <table>
         <thead>
             <tr>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 <th style="text-align:left;">Item</th>
                 <th class="right">Qty</th>
@@ -222,6 +235,8 @@ $items = mysqli_query($conn, "
 
    
 =======
+=======
+>>>>>>> Stashed changes
                 <th>Product</th>
                 <th>Qty</th>
                 <th>Price</th>
@@ -245,6 +260,9 @@ $items = mysqli_query($conn, "
     <h3>Total Paid: <?= number_format($sale['total_amount'], 2) ?></h3>
 
     <button onclick="window.print()">Print Receipt</button>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 </body>
 </html>

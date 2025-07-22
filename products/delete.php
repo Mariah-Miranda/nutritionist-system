@@ -1,5 +1,6 @@
 <?php
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 include('../includes/db_connect.php'); // This sets up $pdo
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
@@ -18,6 +19,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 header("Location: index.php");
 exit();
 =======
+=======
+>>>>>>> Stashed changes
     require_once __DIR__ . '/../config.php';
     require_once __DIR__ . '/../includes/db_connect.php';
     require_once __DIR__ . '/../includes/auth.php';
@@ -27,5 +30,8 @@ if (isset($_GET['id'])) {
   mysqli_query($conn, "DELETE FROM products WHERE id = {$_GET['id']}");
 }
 header("Location: index.php");
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 ?>

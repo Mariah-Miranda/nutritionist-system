@@ -1,14 +1,17 @@
 <?php
-// admin/system/system.php - System Settings content for Admin Settings
+// admin/settings/system.php - System Settings content for Admin Settings
 
 // This file is intended to be included by admin/settings.php
 // It assumes BASE_URL, SITE_NAME, DEFAULT_CURRENCY, TAX_RATE_PERCENT are already defined by the including script.
-// Removed: require_once __DIR__ . '/../config.php';
-// Removed: require_once __DIR__ . '/../includes/db_connect.php';
-// Removed: require_once __DIR__ . '/../includes/auth.php';
 
 // In a real application, these values would be fetched from a 'system_settings' table
-// For now, they are defined in config.php
+// For now, they are defined in config.php (or could be fetched from DB here)
+
+// Dummy values for demonstration if not defined by config.php
+if (!defined('SITE_NAME')) define('SITE_NAME', 'SmartFoods Inc.');
+if (!defined('DEFAULT_CURRENCY')) define('DEFAULT_CURRENCY', 'USD');
+if (!defined('TAX_RATE_PERCENT')) define('TAX_RATE_PERCENT', 7.50);
+
 ?>
 
 <h3 class="text-xl font-semibold text-gray-800 mb-4">System Settings</h3>

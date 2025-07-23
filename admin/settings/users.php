@@ -1,21 +1,19 @@
 <?php
-// admin/users/users.php - User Management content for Admin Settings
+// admin/settings/users.php - User Management content for Admin Settings
 
 // This file is intended to be included by admin/settings.php
 // It assumes $pdo, requireLogin(), hasRole(), and BASE_URL are already defined by the including script.
-// Removed: require_once __DIR__ . '/../config.php';
-// Removed: require_once __DIR__ . '/../includes/db_connect.php';
-// Removed: require_once __DIR__ . '/../includes/auth.php';
 
-// Fetch User Data
+// Fetch User Data from the database
 $users = [];
 try {
-    // $pdo is now available from the parent scope
+    // $pdo is available from the parent scope (admin/settings.php)
     $stmt_users = $pdo->query("SELECT user_id, full_name, email, role, status, last_login FROM users ORDER BY full_name ASC");
     $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Error fetching users for admin settings: " . $e->getMessage());
-    $_SESSION['error_message'] = "Error loading user data.";
+    // You might want to set a session error message here to display to the user
+    // For example: $_SESSION['error_message'] = "Error loading user data. Please try again later.";
 }
 ?>
 
@@ -28,7 +26,7 @@ try {
 <?php if (empty($users)): ?>
     <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md" role="alert">
         <p class="font-bold">No Users Found</p>
-        <p>There are no user accounts to manage.</p>
+        <p>It looks like there are no users registered yet. Click "Add New User" to get started.</p>
     </div>
 <?php else: ?>
     <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
@@ -47,13 +45,32 @@ try {
                 <?php foreach ($users as $user): ?>
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            <?php
-                                // Display initial for profile picture if no image is available
-                                $initial = strtoupper(substr($user['full_name'], 0, 1));
-                            ?>
                             <div class="flex items-center">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-200 text-blue-800 font-bold text-sm mr-3">
-                                    <?php echo $initial; ?>
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full
+                                    <?php
+                                        // Assign background color based on the first letter of the name
+                                        $firstChar = strtoupper(substr($user['full_name'], 0, 1));
+                                        $bgColor = '';
+                                        $textColor = '';
+                                        if (in_array($firstChar, ['A', 'E', 'I', 'O', 'U'])) {
+                                            $bgColor = 'bg-red-200';
+                                            $textColor = 'text-red-800';
+                                        } else if (in_array($firstChar, ['B', 'C', 'D', 'F', 'G'])) {
+                                            $bgColor = 'bg-blue-200';
+                                            $textColor = 'text-blue-800';
+                                        } else if (in_array($firstChar, ['H', 'J', 'K', 'L', 'M'])) {
+                                            $bgColor = 'bg-green-200';
+                                            $textColor = 'text-green-800';
+                                        } else if (in_array($firstChar, ['N', 'P', 'Q', 'R', 'S'])) {
+                                            $bgColor = 'bg-purple-200';
+                                            $textColor = 'text-purple-800';
+                                        } else {
+                                            $bgColor = 'bg-yellow-200';
+                                            $textColor = 'text-yellow-800';
+                                        }
+                                        echo "$bgColor $textColor";
+                                    ?> font-bold text-sm mr-3">
+                                    <?php echo htmlspecialchars($firstChar); ?>
                                 </span>
                                 <?php echo htmlspecialchars($user['full_name']); ?>
                             </div>
@@ -65,7 +82,7 @@ try {
                                     if ($user['role'] === 'Admin') echo 'bg-red-100 text-red-800';
                                     else if ($user['role'] === 'Nutritionist') echo 'bg-blue-100 text-blue-800';
                                     else if ($user['role'] === 'Sales') echo 'bg-yellow-100 text-yellow-800';
-                                    else echo 'bg-gray-100 text-gray-800';
+                                    else echo 'bg-gray-100 text-gray-800'; // Default for 'Staff' or other roles
                                 ?>">
                                 <?php echo htmlspecialchars($user['role']); ?>
                             </span>

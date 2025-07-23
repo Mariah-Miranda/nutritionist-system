@@ -1,12 +1,8 @@
 <?php
-// admin/security/security.php - Security Settings content for Admin Settings
+// admin/settings/security.php - Security Settings content for Admin Settings
 
 // This file is intended to be included by admin/settings.php
-// It assumes BASE_URL, SITE_NAME, DEFAULT_CURRENCY, TAX_RATE_PERCENT are already defined by the including script.
-// Removed: require_once __DIR__ . '/../config.php';
-// Removed: require_once __DIR__ . '/../includes/db_connect.php';
-// Removed: require_once __DIR__ . '/../includes/auth.php';
-
+// It assumes BASE_URL is already defined by the including script.
 // In a real application, these values would be fetched from a 'system_settings' or 'security_settings' table
 ?>
 

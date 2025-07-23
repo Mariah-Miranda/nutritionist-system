@@ -44,7 +44,7 @@ try {
 } catch (PDOException $e) {
     error_log("ERROR: Could not export patient report: " . $e->getMessage());
     $_SESSION['error_message'] = "Error exporting patient report. Please try again later.";
-    header('Location: ' . BASE_URL . 'admin/reports/report.php');
+    header('Location: ' . BASE_URL . 'reports/report.php');
     exit();
 }
 ?>

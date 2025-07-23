@@ -169,7 +169,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <i class="fas fa-user-plus text-xl text-green-600"></i>
                 <span class="font-medium">Add New Patient</span>
             </a>
-            <a href="<?php echo BASE_URL; ?>../appointments/schedule.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
+            <a href="<?php echo BASE_URL; ?>../appointments/.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
                 <i class="fas fa-calendar-plus text-xl text-green-600"></i>
                 <span class="font-medium">Schedule Appointment</span>
             </a>

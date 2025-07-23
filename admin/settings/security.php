@@ -1,13 +1,13 @@
 <?php
-// admin/settings/security.php - Security Settings content for Admin Settings
+// settings/security.php - Security Settings content for Admin Settings
 
-// This file is intended to be included by admin/settings.php
+// This file is intended to be included by settings.php
 // It assumes BASE_URL is already defined by the including script.
 // In a real application, these values would be fetched from a 'system_settings' or 'security_settings' table
 ?>
 
 <h3 class="text-xl font-semibold text-gray-800 mb-4">Security Settings</h3>
-<form action="<?php echo BASE_URL; ?>admin/process_security_settings.php" method="POST" class="space-y-6">
+<form action="<?php echo BASE_URL; ?>process_security_settings.php" method="POST" class="space-y-6">
     <!-- Password Policy -->
     <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
         <h4 class="text-lg font-semibold text-gray-800 mb-4">Password Policy</h4>

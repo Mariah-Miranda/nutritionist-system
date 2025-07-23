@@ -73,15 +73,10 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                             <span class="text-lg">Sales</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="<?php echo BASE_URL; ?>../admin/reports/report.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
-                            <i class="fas fa-chart-line text-xl"></i>
-                            <span class="text-lg">Analytics</span>
-                        </a>
-                    </li>
+                    
                     <?php if ($currentUserRole === 'Admin'): // Admin specific link ?>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>../../admin/settings.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../admin/settings.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-cog text-xl"></i>
                             <span class="text-lg">Admin Settings</span>
                         </a>

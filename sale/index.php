@@ -1,5 +1,6 @@
 <?php
 include('../includes/db_connect.php');
+include('../includes/header.php');
 
 $today = date('Y-m-d');
 

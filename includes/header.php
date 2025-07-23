@@ -68,7 +68,7 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo BASE_URL; ?>../sale/new.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <a href="<?php echo BASE_URL; ?>../sale/index.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-cash-register text-xl"></i>
                             <span class="text-lg">Sales</span>
                         </a>

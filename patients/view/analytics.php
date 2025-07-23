@@ -1,5 +1,5 @@
 <?php
-// patients/view/analytics.php - Displays patient health analytics
+// ../view/analytics.php - Displays patient health analytics
 
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../includes/db_connect.php';
@@ -22,7 +22,7 @@ $patient_id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
 if (!$patient_id) {
     $message = "Invalid patient ID provided for analytics.";
     $_SESSION['error_message'] = $message;
-    header('Location: ' . BASE_URL . 'patients/list.php'); // Redirect to patient list
+    header('Location: ' . BASE_URL . '../list.php'); // Redirect to patient list
     exit();
 }
 
@@ -36,7 +36,7 @@ try {
     if (!$patient) {
         $message = "Patient not found.";
         $_SESSION['error_message'] = $message;
-        header('Location: ' . BASE_URL . 'patients/list.php'); // Redirect to patient list
+        header('Location: ' . BASE_URL . '../list.php'); // Redirect to patient list
         exit();
     }
 
@@ -85,7 +85,7 @@ try {
     error_log("ERROR: Could not fetch patient analytics data: " . $e->getMessage());
     $message = "Error loading patient analytics. Please try again later.";
     $_SESSION['error_message'] = $message;
-    header('Location: ' . BASE_URL . 'patients/view.php?id=' . $patient_id); // Redirect back to patient view
+    header('Location: ' . BASE_URL . '../view.php?id=' . $patient_id); // Redirect back to patient view
     exit();
 }
 
@@ -99,7 +99,7 @@ require_once __DIR__ . '/../../includes/header.php';
 <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800"><?php echo htmlspecialchars($patient['full_name']); ?>'s Health Analytics</h2>
-        <a href="<?php echo BASE_URL; ?>patients/view.php?id=<?php echo $patient_id; ?>" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">
+        <a href="<?php echo BASE_URL; ?>../view.php?id=<?php echo $patient_id; ?>" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">
             <i class="fas fa-arrow-left"></i>
             <span>Back to Profile</span>
         </a>

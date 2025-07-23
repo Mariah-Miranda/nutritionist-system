@@ -1,5 +1,5 @@
 <?php
-// patients/process_patient.php
+// process_patient.php
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db_connect.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -8,7 +8,7 @@ require_once __DIR__ . '/../ai/recommendation_engine.php'; // Include the AI rec
 
 // Ensure only POST requests are processed
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ' . BASE_URL . 'patients/add.php?message=Invalid request method.');
+    header('Location: ' . BASE_URL . 'add.php?message=Invalid request method.');
     exit();
 }
 
@@ -155,7 +155,7 @@ try {
         }
 
         $message = 'Patient added successfully!';
-        $redirectUrl = BASE_URL . 'patients/list.php?message=' . urlencode($message); // Redirect to patient list
+        $redirectUrl = BASE_URL . 'list.php?message=' . urlencode($message); // Redirect to patient list
     }
 
     $pdo->commit(); // Commit the transaction
@@ -192,7 +192,7 @@ try {
     }
 
     // Set the final redirect URL to the patient's view page
-    $redirectUrl = BASE_URL . 'patients/view.php?id=' . $patient_id_for_redirect . '&message=' . urlencode($message);
+    $redirectUrl = BASE_URL . 'view.php?id=' . $patient_id_for_redirect . '&message=' . urlencode($message);
 
 
 } catch (Exception $e) {
@@ -202,7 +202,7 @@ try {
     $message = 'Error processing patient data: ' . $e->getMessage();
     // Redirect back with error message and form data to re-fill
     // For edit mode, redirect back to edit page with ID
-    $redirectUrl = BASE_URL . 'patients/' . ($is_edit_mode ? 'edit.php?id=' . $patient_id : 'add.php') . '?message=' . urlencode($message) . '&' . http_build_query($_POST);
+    $redirectUrl = BASE_URL . '' . ($is_edit_mode ? 'edit.php?id=' . $patient_id : 'add.php') . '?message=' . urlencode($message) . '&' . http_build_query($_POST);
 }
 
 // Redirect with message

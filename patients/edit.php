@@ -1,5 +1,5 @@
 <?php
-// patients/edit.php
+// edit.php
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db_connect.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -25,7 +25,7 @@ $patient_id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
 
 if (!$patient_id) {
     $message = "Invalid patient ID provided for editing.";
-    header('Location: ' . BASE_URL . 'patients/list.php?message=' . urlencode($message));
+    header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
     exit();
 }
 
@@ -38,7 +38,7 @@ try {
 
     if (!$patient) {
         $message = "Patient not found for editing.";
-        header('Location: ' . BASE_URL . 'patients/list.php?message=' . urlencode($message));
+        header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
         exit();
     }
 
@@ -56,7 +56,7 @@ try {
 } catch (PDOException $e) {
     error_log("Error fetching patient for editing: " . $e->getMessage());
     $message = "Error loading patient data for editing. Please try again later.";
-    header('Location: ' . BASE_URL . 'patients/list.php?message=' . urlencode($message));
+    header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
     exit();
 }
 
@@ -64,42 +64,42 @@ try {
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="form-container">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Patient: <?php echo htmlspecialchars($patient['full_name']); ?></h2>
+<div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-green-600 pb-2">Edit Patient: <?php echo htmlspecialchars($patient['full_name']); ?></h2>
 
     <?php if ($message): ?>
-        <div class="message <?php echo strpos($message, 'successful') !== false ? 'success' : 'error'; ?>">
+        <div class="bg-<?php echo strpos($message, 'successful') !== false ? 'green' : 'red'; ?>-100 border-l-4 border-<?php echo strpos($message, 'successful') !== false ? 'green' : 'red'; ?>-500 text-<?php echo strpos($message, 'successful') !== false ? 'green' : 'red'; ?>-700 p-4 mb-6 rounded" role="alert">
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
 
-    <form action="<?php echo BASE_URL; ?>patients/process_patient.php" method="POST" class="space-y-6">
+    <form action="<?php echo BASE_URL; ?>process_patient.php" method="POST" class="space-y-6">
         <!-- Hidden field to send patient_id for update -->
         <input type="hidden" name="patient_id" value="<?php echo htmlspecialchars($patient['patient_id']); ?>">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Full Name -->
-            <div class="form-group">
-                <label for="full_name">Full Name</label>
-                <input type="text" id="full_name" name="full_name" required placeholder="John Doe" value="<?php echo htmlspecialchars($patient['full_name'] ?? ''); ?>">
+            <div>
+                <label for="full_name" class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                <input type="text" id="full_name" name="full_name" required placeholder="John Doe" value="<?php echo htmlspecialchars($patient['full_name'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Patient ID (display only) -->
-            <div class="form-group">
-                <label for="patient_unique_id">Patient ID</label>
-                <input type="text" id="patient_unique_id" name="patient_unique_id" value="<?php echo htmlspecialchars($patient['patient_unique_id'] ?? ''); ?>" disabled>
+            <div>
+                <label for="patient_unique_id" class="block text-gray-700 font-semibold mb-2">Patient ID</label>
+                <input type="text" id="patient_unique_id" name="patient_unique_id" value="<?php echo htmlspecialchars($patient['patient_unique_id'] ?? ''); ?>" disabled class="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
             </div>
 
             <!-- Date of Birth -->
-            <div class="form-group">
-                <label for="date_of_birth">Date of Birth</label>
-                <input type="date" id="date_of_birth" name="date_of_birth" value="<?php echo htmlspecialchars($patient['date_of_birth'] ?? ''); ?>">
+            <div>
+                <label for="date_of_birth" class="block text-gray-700 font-semibold mb-2">Date of Birth</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" value="<?php echo htmlspecialchars($patient['date_of_birth'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Gender -->
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <select id="gender" name="gender">
+            <div>
+                <label for="gender" class="block text-gray-700 font-semibold mb-2">Gender</label>
+                <select id="gender" name="gender" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Select Gender</option>
                     <option value="Male" <?php echo ($patient['gender'] ?? '') === 'Male' ? 'selected' : ''; ?>>Male</option>
                     <option value="Female" <?php echo ($patient['gender'] ?? '') === 'Female' ? 'selected' : ''; ?>>Female</option>
@@ -108,45 +108,45 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <!-- Height (cm) -->
-            <div class="form-group">
-                <label for="height_cm">Height (cm)</label>
-                <input type="number" id="height_cm" name="height_cm" step="0.01" placeholder="e.g., 175.5" value="<?php echo htmlspecialchars($latestMetrics['height_cm'] ?? ''); ?>">
+            <div>
+                <label for="height_cm" class="block text-gray-700 font-semibold mb-2">Height (cm)</label>
+                <input type="number" id="height_cm" name="height_cm" step="0.01" placeholder="e.g., 175.5" value="<?php echo htmlspecialchars($latestMetrics['height_cm'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Weight (kg) -->
-            <div class="form-group">
-                <label for="weight_kg">Weight (kg)</label>
-                <input type="number" id="weight_kg" name="weight_kg" step="0.01" placeholder="e.g., 70.2" value="<?php echo htmlspecialchars($latestMetrics['weight_kg'] ?? ''); ?>">
+            <div>
+                <label for="weight_kg" class="block text-gray-700 font-semibold mb-2">Weight (kg)</label>
+                <input type="number" id="weight_kg" name="weight_kg" step="0.01" placeholder="e.g., 70.2" value="<?php echo htmlspecialchars($latestMetrics['weight_kg'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- BMI (Calculated, display only) -->
-            <div class="form-group">
-                <label for="bmi">BMI</label>
-                <input type="text" id="bmi" name="bmi" placeholder="Calculated automatically" disabled value="<?php echo htmlspecialchars($latestMetrics['bmi'] ?? ''); ?>">
-                <p id="bmi_status" class="text-sm mt-1"></p>
+            <div>
+                <label for="bmi" class="block text-gray-700 font-semibold mb-2">BMI</label>
+                <input type="text" id="bmi" name="bmi" placeholder="Calculated automatically" disabled value="<?php echo htmlspecialchars($latestMetrics['bmi'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
+                <p id="bmi_status" class="text-sm mt-1 text-gray-500"></p>
             </div>
 
             <!-- Blood Pressure -->
-            <div class="form-group">
-                <label for="systolic_bp">Blood Pressure (mmHg)</label>
+            <div>
+                <label for="systolic_bp" class="block text-gray-700 font-semibold mb-2">Blood Pressure (mmHg)</label>
                 <div class="flex gap-2">
-                    <input type="number" id="systolic_bp" name="systolic_bp" placeholder="Systolic" class="w-1/2" value="<?php echo htmlspecialchars($latestMetrics['systolic_bp'] ?? ''); ?>">
-                    <input type="number" id="diastolic_bp" name="diastolic_bp" placeholder="Diastolic" class="w-1/2" value="<?php echo htmlspecialchars($latestMetrics['diastolic_bp'] ?? ''); ?>">
+                    <input type="number" id="systolic_bp" name="systolic_bp" placeholder="Systolic" value="<?php echo htmlspecialchars($latestMetrics['systolic_bp'] ?? ''); ?>" class="w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="number" id="diastolic_bp" name="diastolic_bp" placeholder="Diastolic" value="<?php echo htmlspecialchars($latestMetrics['diastolic_bp'] ?? ''); ?>" class="w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <p id="bp_status" class="text-sm text-gray-500 mt-1">Normal: 120/80 mmHg</p>
             </div>
 
             <!-- Blood Sugar Level -->
-            <div class="form-group">
-                <label for="blood_sugar_level_mg_dL">Blood Sugar Level</label>
-                <input type="number" id="blood_sugar_level_mg_dL" name="blood_sugar_level_mg_dL" step="0.01" placeholder="mg/dL" value="<?php echo htmlspecialchars($latestMetrics['blood_sugar_level_mg_dL'] ?? ''); ?>">
+            <div>
+                <label for="blood_sugar_level_mg_dL" class="block text-gray-700 font-semibold mb-2">Blood Sugar Level (mg/dL)</label>
+                <input type="number" id="blood_sugar_level_mg_dL" name="blood_sugar_level_mg_dL" step="0.01" placeholder="mg/dL" value="<?php echo htmlspecialchars($latestMetrics['blood_sugar_level_mg_dL'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <p id="bs_status" class="text-sm text-gray-500 mt-1">Normal fasting: 70-100 mg/dL</p>
             </div>
 
             <!-- Blood Sugar Fasting Status -->
-            <div class="form-group">
-                <label for="blood_sugar_fasting_status">Blood Sugar Status</label>
-                <select id="blood_sugar_fasting_status" name="blood_sugar_fasting_status">
+            <div>
+                <label for="blood_sugar_fasting_status" class="block text-gray-700 font-semibold mb-2">Blood Sugar Status</label>
+                <select id="blood_sugar_fasting_status" name="blood_sugar_fasting_status" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Select Status</option>
                     <option value="Fasting (8+ hours)" <?php echo ($latestMetrics['blood_sugar_fasting_status'] ?? '') === 'Fasting (8+ hours)' ? 'selected' : ''; ?>>Fasting (8+ hours)</option>
                     <option value="Non-Fasting" <?php echo ($latestMetrics['blood_sugar_fasting_status'] ?? '') === 'Non-Fasting' ? 'selected' : ''; ?>>Non-Fasting</option>
@@ -156,42 +156,42 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
 
         <!-- Address -->
-        <div class="form-group">
-            <label for="address">Address</label>
-            <textarea id="address" name="address" rows="3" placeholder="Patient's full address"><?php echo htmlspecialchars($patient['address'] ?? ''); ?></textarea>
+        <div>
+            <label for="address" class="block text-gray-700 font-semibold mb-2">Address</label>
+            <textarea id="address" name="address" rows="3" placeholder="Patient's full address" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"><?php echo htmlspecialchars($patient['address'] ?? ''); ?></textarea>
         </div>
 
         <!-- Email -->
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="patient.email@example.com" value="<?php echo htmlspecialchars($patient['email'] ?? ''); ?>">
+        <div>
+            <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+            <input type="email" id="email" name="email" placeholder="patient.email@example.com" value="<?php echo htmlspecialchars($patient['email'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Phone -->
-        <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="text" id="phone" name="phone" placeholder="+256 7XX XXX XXX" value="<?php echo htmlspecialchars($patient['phone'] ?? ''); ?>">
+        <div>
+            <label for="phone" class="block text-gray-700 font-semibold mb-2">Phone</label>
+            <input type="text" id="phone" name="phone" placeholder="+256 7XX XXX XXX" value="<?php echo htmlspecialchars($patient['phone'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Health Conditions -->
-        <div class="form-group">
-            <label for="health_conditions">Health Conditions</label>
-            <textarea id="health_conditions" name="health_conditions" rows="4" placeholder="Enter any health conditions, allergies, or medical history..."><?php echo htmlspecialchars($patient['health_conditions'] ?? ''); ?></textarea>
+        <div>
+            <label for="health_conditions" class="block text-gray-700 font-semibold mb-2">Health Conditions</label>
+            <textarea id="health_conditions" name="health_conditions" rows="4" placeholder="Enter any health conditions, allergies, or medical history..." class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"><?php echo htmlspecialchars($patient['health_conditions'] ?? ''); ?></textarea>
         </div>
 
         <!-- Membership -->
-        <div class="form-group">
-            <label for="membership_status">Membership</label>
-            <select id="membership_status" name="membership_status">
+        <div>
+            <label for="membership_status" class="block text-gray-700 font-semibold mb-2">Membership</label>
+            <select id="membership_status" name="membership_status" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="No Membership" <?php echo ($patient['membership_status'] ?? '') === 'No Membership' ? 'selected' : ''; ?>>No Membership</option>
                 <option value="Standard" <?php echo ($patient['membership_status'] ?? '') === 'Standard' ? 'selected' : ''; ?>>Standard</option>
                 <option value="Premium" <?php echo ($patient['membership_status'] ?? '') === 'Premium' ? 'selected' : ''; ?>>Premium</option>
             </select>
         </div>
 
-        <div class="form-actions">
-            <button type="button" class="btn-secondary" onclick="window.location.href='<?php echo BASE_URL; ?>patients/view.php?id=<?php echo $patient['patient_id']; ?>';">Cancel</button>
-            <button type="submit" class="btn-primary">Update Patient</button>
+        <div class="flex justify-end space-x-4 mt-6">
+            <a href="<?php echo BASE_URL; ?>view.php?id=<?php echo $patient['patient_id']; ?>" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">Cancel</a>
+            <button type="submit" class="px-6 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors">Update Patient</button>
         </div>
     </form>
 </div>
@@ -235,15 +235,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 bmiStatus.className = 'text-sm mt-1 text-green-600';
             } else if (bmi >= 25 && bmi < 29.9) {
                 bmiStatus.textContent = 'Overweight';
-                bmiStatus.className = 'text-orange-600';
+                bmiStatus.className = 'text-sm mt-1 text-orange-600';
             } else if (bmi >= 30) {
                 bmiStatus.textContent = 'Obese';
-                bmiStatus.className = 'text-red-600';
+                bmiStatus.className = 'text-sm mt-1 text-red-600';
             }
         } else {
             bmiInput.value = '';
             bmiStatus.textContent = '';
-            bmiStatus.className = 'text-sm mt-1';
+            bmiStatus.className = 'text-sm mt-1 text-gray-500'; // Reset to default gray
         }
     }
 

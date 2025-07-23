@@ -122,7 +122,7 @@ include_once __DIR__ . '/../includes/header.php';
 
         <!-- Submit Button -->
         <div class="flex justify-end space-x-4">
-            <a href="<?php echo BASE_URL; ?>appointments/" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">Cancel</a>
+            <a href="<?php echo BASE_URL; ?>index.php" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">Cancel</a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors">
                 <?php echo $edit_mode ? 'Update Appointment' : 'Schedule Appointment'; ?>
             </button>

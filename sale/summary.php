@@ -1,5 +1,8 @@
 <?php
 include('../includes/db_connect.php');
+include('../includes/header.php'); // Include header for consistent styling and auth
+
+$pageTitle = 'Sales Summary'; // Set page title
 
 // Daily summary query
 $dailyStmt = $pdo->query("
@@ -20,47 +23,64 @@ $topStmt = $pdo->query("
 ");
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sales Summary</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-    </style>
-</head>
-<body>
-    <h2>Sales Summary</h2>
+<div class="container mx-auto p-4 md:p-8">
+    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Sales Summary</h2>
 
-    <h3>Daily Sales</h3>
-    <table>
-        <thead>
-            <tr><th>Date</th><th>Total Sales</th><th>Revenue</th></tr>
-        </thead>
-        <tbody>
-            <?php while ($row = $dailyStmt->fetch(PDO::FETCH_ASSOC)): ?>
-            <tr>
-                <td><?= htmlspecialchars($row['day']) ?></td>
-                <td><?= (int)$row['total_sales'] ?></td>
-                <td><?= number_format((float)$row['revenue'], 2) ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
+        <h3 class="text-xl font-medium text-gray-700 mb-4">Daily Sales</h3>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Date</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Total Sales</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Revenue (<?php echo DEFAULT_CURRENCY; ?>)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <?php while ($row = $dailyStmt->fetch(PDO::FETCH_ASSOC)): ?>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-4 text-gray-800"><?= htmlspecialchars($row['day']) ?></td>
+                        <td class="py-3 px-4 text-gray-800"><?= (int)$row['total_sales'] ?></td>
+                        <td class="py-3 px-4 text-gray-800"><?= number_format((float)$row['revenue'], 2) ?></td>
+                    </tr>
+                    <?php endwhile; ?>
+                    <?php if ($dailyStmt->rowCount() === 0): ?>
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-gray-500">No daily sales data found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
 
-    <h3>Top 5 Best-Selling Products</h3>
-    <table>
-        <thead>
-            <tr><th>Product</th><th>Units Sold</th></tr>
-        </thead>
-        <tbody>
-            <?php while ($row = $topStmt->fetch(PDO::FETCH_ASSOC)): ?>
-            <tr>
-                <td><?= htmlspecialchars($row['product_name']) ?></td>
-                <td><?= (int)$row['total_sold'] ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-</body>
-</html>
+        <h3 class="text-xl font-medium text-gray-700 mb-4">Top 5 Best-Selling Products</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Product</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Units Sold</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <?php while ($row = $topStmt->fetch(PDO::FETCH_ASSOC)): ?>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-4 text-gray-800"><?= htmlspecialchars($row['product_name']) ?></td>
+                        <td class="py-3 px-4 text-gray-800"><?= (int)$row['total_sold'] ?></td>
+                    </tr>
+                    <?php endwhile; ?>
+                    <?php if ($topStmt->rowCount() === 0): ?>
+                        <tr>
+                            <td colspan="2" class="text-center py-4 text-gray-500">No best-selling products data found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<?php
+include('../includes/footer.php'); // Include footer
+?>

@@ -22,7 +22,7 @@ $patient_id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
 if (!$patient_id) {
     $message = "Invalid patient ID provided for analytics.";
     $_SESSION['error_message'] = $message;
-    header('Location: ' . BASE_URL . '../list.php'); // Redirect to patient list
+    header('Location: ' . BASE_URL . '../patients/list.php'); // Redirect to patient list
     exit();
 }
 
@@ -36,7 +36,7 @@ try {
     if (!$patient) {
         $message = "Patient not found.";
         $_SESSION['error_message'] = $message;
-        header('Location: ' . BASE_URL . '../list.php'); // Redirect to patient list
+        header('Location: ' . BASE_URL . '../patients/list.php'); // Redirect to patient list
         exit();
     }
 

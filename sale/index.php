@@ -13,8 +13,8 @@ $stmt = $pdo->prepare("
 $stmt->execute([$today]);
 $todayStats = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Get total customers
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM clients");
+// Get total customers (now considering patients as primary clients)
+$stmt = $pdo->query("SELECT COUNT(*) as total FROM patients");
 $totalCustomers = $stmt->fetchColumn();
 
 // Get product count

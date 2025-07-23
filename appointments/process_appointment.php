@@ -76,12 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Redirect back to the main appointments page
-    header("Location: " . BASE_URL . "appointments/");
+    header("Location: " . BASE_URL . "index.php");
     exit();
 
 } else {
     // If accessed directly without a valid method, redirect
-    header("Location: " . BASE_URL . "appointments/");
+    header("Location: " . BASE_URL . "index.php");
     exit();
 }
 

@@ -15,7 +15,7 @@ $appointment_time = '';
 $reason = '';
 $status = 'Scheduled'; // Default status
 $pageTitle = "Schedule New Appointment";
-$form_action = BASE_URL . "appointments/process_appointment.php";
+$form_action = BASE_URL . "process_appointment.php";
 
 // --- CHECK FOR EDIT MODE ---
 if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {

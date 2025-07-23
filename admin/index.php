@@ -165,15 +165,15 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="mt-12 p-6 bg-gray-50 rounded-lg border border-gray-200">
         <h3 class="text-2xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a href="<?php echo BASE_URL; ?>patients/add.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
+            <a href="<?php echo BASE_URL; ?>../patients/add.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
                 <i class="fas fa-user-plus text-xl text-green-600"></i>
                 <span class="font-medium">Add New Patient</span>
             </a>
-            <a href="<?php echo BASE_URL; ?>appointments/new.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
+            <a href="<?php echo BASE_URL; ?>../appointments/schedule.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
                 <i class="fas fa-calendar-plus text-xl text-green-600"></i>
                 <span class="font-medium">Schedule Appointment</span>
             </a>
-            <a href="<?php echo BASE_URL; ?>sale/new.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
+            <a href="<?php echo BASE_URL; ?>../sale/new.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
                 <i class="fas fa-cash-register text-xl text-green-600"></i>
                 <span class="font-medium">Process New Sale</span>
             </a>

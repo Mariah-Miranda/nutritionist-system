@@ -42,9 +42,15 @@ try {
 
     $pageTitle = htmlspecialchars($patient['full_name']) . " - Health Analytics";
 
+    // Define the number of days back to fetch data for the graph
+    // Changed to 30 days to make the record time shorter
+    $days_back = 30; // Example: Fetch data for the last 30 days (approx. 1 month)
+
     // Fetch all health metrics for the patient, ordered by date
-    $stmt_all_metrics = $pdo->prepare("SELECT record_date, weight_kg, bmi, systolic_bp, diastolic_bp, blood_sugar_level_mg_dL, blood_sugar_fasting_status FROM patient_health_metrics WHERE patient_id = :patient_id ORDER BY record_date ASC");
+    // Added a WHERE clause to limit records to the last $days_back
+    $stmt_all_metrics = $pdo->prepare("SELECT record_date, weight_kg, bmi, systolic_bp, diastolic_bp, blood_sugar_level_mg_dL, blood_sugar_fasting_status FROM patient_health_metrics WHERE patient_id = :patient_id AND record_date >= DATE_SUB(CURDATE(), INTERVAL :days_back DAY) ORDER BY record_date ASC");
     $stmt_all_metrics->bindParam(':patient_id', $patient_id, PDO::PARAM_INT);
+    $stmt_all_metrics->bindParam(':days_back', $days_back, PDO::PARAM_INT);
     $stmt_all_metrics->execute();
     $allHealthMetrics = $stmt_all_metrics->fetchAll(PDO::FETCH_ASSOC);
 
@@ -185,7 +191,7 @@ require_once __DIR__ . '/../../includes/header.php';
             <!-- Individual Patient Progress Chart (BMI) -->
             <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Individual Patient Progress - BMI</h3>
-                <canvas id="bmiChart" class="h-80"></canvas>
+                <canvas id="bmiChart" class="h-48"></canvas> <!-- Added h-48 for fixed small height -->
             </div>
 
             <!-- Health Outcomes Progress Bars -->
@@ -232,44 +238,19 @@ require_once __DIR__ . '/../../includes/header.php';
             </div>
         </div>
 
-        <!-- Additional Charts (Weight, Blood Pressure, Blood Sugar) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-            <!-- Weight Trends Chart -->
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Weight Trends</h3>
-                <canvas id="weightChart" class="h-80"></canvas>
-            </div>
-
-            <!-- Blood Pressure Chart -->
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Blood Pressure Trends</h3>
-                <canvas id="bpChart" class="h-80"></canvas>
-            </div>
-
-            <!-- Blood Sugar Chart -->
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 lg:col-span-2">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Blood Sugar Trends</h3>
-                <canvas id="bloodSugarChart" class="h-80"></canvas>
-            </div>
-        </div>
+        <!-- Additional Charts (Removed) -->
     <?php endif; ?>
 </div>
 
 <script>
 // Declare chart instances in a broader scope to allow destruction
 let bmiChartInstance = null;
-let weightChartInstance = null;
-let bpChartInstance = null;
-let bloodSugarChartInstance = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     const healthMetricsData = <?php echo json_encode($allHealthMetrics); ?>;
 
     // Destroy existing charts if they exist before processing new data
     if (bmiChartInstance) bmiChartInstance.destroy();
-    if (weightChartInstance) weightChartInstance.destroy();
-    if (bpChartInstance) bpChartInstance.destroy();
-    if (bloodSugarChartInstance) bloodSugarChartInstance.destroy();
 
     if (healthMetricsData.length === 0) {
         return; // No data to chart, and existing charts are destroyed
@@ -277,11 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Prepare data for charts
     const labels = healthMetricsData.map(metric => new Date(metric.record_date).toLocaleDateString());
-    const weights = healthMetricsData.map(metric => parseFloat(metric.weight_kg));
     const bmis = healthMetricsData.map(metric => parseFloat(metric.bmi));
-    const systolicBps = healthMetricsData.map(metric => parseFloat(metric.systolic_bp));
-    const diastolicBps = healthMetricsData.map(metric => parseFloat(metric.diastolic_bp));
-    const bloodSugars = healthMetricsData.map(metric => parseFloat(metric.blood_sugar_level_mg_dL));
 
     // --- BMI Chart (Main Progress Chart) ---
     const bmiCtx = document.getElementById('bmiChart').getContext('2d');
@@ -306,7 +283,8 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: false, // Allow chart to fill container
+            animation: false, // Disable animations to make it static
             plugins: {
                 title: {
                     display: false // Title moved to H3
@@ -333,7 +311,8 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             scales: {
                 y: {
-                    beginAtZero: false, // Reverted to false
+                    beginAtZero: false, // Let Chart.js determine the optimal start based on data
+                    // No 'max' or 'min' set, allowing auto-scaling for better data visibility
                     title: {
                         display: true,
                         text: 'BMI',
@@ -356,234 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-
-    // --- Weight Chart ---
-    const weightCtx = document.getElementById('weightChart').getContext('2d');
-    weightChartInstance = new Chart(weightCtx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Weight (kg)',
-                    data: weights,
-                    borderColor: 'rgb(75, 192, 192)', // Teal color
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    tension: 0.3,
-                    fill: false,
-                    pointBackgroundColor: 'rgb(75, 192, 192)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(75, 192, 192)'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Weight Over Time',
-                    font: {
-                        size: 16
-                    },
-                    color: '#333'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toFixed(2) + ' kg';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false, // Reverted to false
-                    title: {
-                        display: true,
-                        text: 'Weight (kg)',
-                        color: '#555'
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Record Date',
-                        color: '#555'
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    }
-                }
-            }
-        }
-    });
-
-    // --- Blood Pressure Chart ---
-    const bpCtx = document.getElementById('bpChart').getContext('2d');
-    bpChartInstance = new Chart(bpCtx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Systolic BP (mmHg)',
-                    data: systolicBps,
-                    borderColor: 'rgb(255, 99, 132)', // Red color
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    tension: 0.3,
-                    fill: false,
-                    pointBackgroundColor: 'rgb(255, 99, 132)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(255, 99, 132)'
-                },
-                {
-                    label: 'Diastolic BP (mmHg)',
-                    data: diastolicBps,
-                    borderColor: 'rgb(54, 162, 235)', // Blue color
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    tension: 0.3,
-                    fill: false,
-                    pointBackgroundColor: 'rgb(54, 162, 235)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(54, 162, 235)'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Blood Pressure Over Time',
-                    font: {
-                        size: 16
-                    },
-                    color: '#333'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y + ' mmHg';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false, // Reverted to false
-                    title: {
-                        display: true,
-                        text: 'Pressure (mmHg)',
-                        color: '#555'
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Record Date',
-                        color: '#555'
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    }
-                }
-            }
-        }
-    });
-
-    // --- Blood Sugar Chart ---
-    const bloodSugarCtx = document.getElementById('bloodSugarChart').getContext('2d');
-    bloodSugarChartInstance = new Chart(bloodSugarCtx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Blood Sugar (mg/dL)',
-                    data: bloodSugars,
-                    borderColor: 'rgb(255, 205, 86)', // Yellow/Orange color
-                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
-                    tension: 0.3,
-                    fill: false,
-                    pointBackgroundColor: 'rgb(255, 205, 86)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(255, 205, 86)'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Blood Sugar Over Time',
-                    font: {
-                        size: 16
-                    },
-                    color: '#333'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toFixed(2) + ' mg/dL';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false, // Reverted to false
-                    title: {
-                        display: true,
-                        text: 'Level (mg/dL)',
-                        color: '#555'
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    }
-                }
-            }
-        }
-    });
 });
 </script>
 
 <?php include_once __DIR__ . '/../../includes/footer.php'; ?>
-security.php
-system.php
-users.php

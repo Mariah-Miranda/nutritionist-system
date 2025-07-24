@@ -135,8 +135,8 @@ thead {
 }
 
 .sales-index-title {
-  color: var(--primary-color);
-  text-align: center;
+  color: var(--text-color);
+  text-align: left;
   margin-bottom: 30px;
   font-size: 2.2rem;
   font-weight: 600;
@@ -185,8 +185,8 @@ thead {
 
 /* Navigation Styles */
 .sales-index-nav {
-  display: flex;
-  justify-content: center;
+  display:flex;
+  justify-content: left;
   gap: 20px;
   flex-wrap: wrap;
   margin-top: 30px;
@@ -300,6 +300,10 @@ form.sale-form select:focus {
   box-shadow: 0 0 5px rgba(0, 123, 94, 0.2);
 }
 
+.product-rows{
+padding: 10px ;
+margin-bottom: 15px;
+}
 /* Buttons */
 form.sale-form button {
   background-color: #198754;

@@ -133,12 +133,115 @@ if ($sale_id) {
                 <a href="history.php" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">View Sales History</a>
             </div>
 
+<<<<<<< Updated upstream
         <?php else: ?>
             <div class="text-center py-8">
                 <p class="text-gray-600 text-lg">Sale receipt not found or invalid sale ID.</p>
                 <a href="new.php" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Go to New Sale</a>
             </div>
         <?php endif; ?>
+=======
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+    }
+
+    td, th {
+        padding: 6px 4px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .barcode {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    button {
+        margin-top: 15px;
+    }
+
+    @media print {
+        button {
+            display: none;
+        }
+    }
+</style>
+
+</head>
+<body>
+ 
+ 
+
+    <h2 class="bold">SMART FOODS LTD</h2>
+    <p>P.O BOX 5568</p>
+    <p>Makerere, Kampala</p>
+    <p>Tel:+256 702 285 608</p>
+
+    <div class="line"></div>
+    <h3>CASH RECEIPT</h3>
+    <div class="line"></div>
+
+    <p><span class="bold">Client:</span> <?= htmlspecialchars($sale['name']) ?> (<?= htmlspecialchars($sale['phone']) ?>)</p>
+    <p><span class="bold">Membership:</span> <?= htmlspecialchars($sale['membership']) ?></p>
+    <p><span class="bold">Date:</span> <?= htmlspecialchars($sale['sale_date']) ?></p>
+
+    <div class="line"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="text-align:left;">Item</th>
+                <th class="right">Qty</th>
+                <th class="right">Price</th>
+                <th class="right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $total = 0; foreach ($items as $row): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['product_name']) ?></td>
+                    <td class="right"><?= $row['quantity'] ?></td>
+                    <td class="right"><?= number_format($row['price'], 2) ?></td>
+                    <td class="right"><?= number_format($row['subtotal'], 2) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <div class="line"></div>
+
+    <table>
+        <tr>
+            <td><strong>Subtotal</strong></td>
+            <td class="right"><?= number_format($sale['total_amount'] + $sale['discount_percent'], 2) ?></td>
+        </tr>
+        <tr>
+            <td><strong>Discount</strong></td>
+            <td class="right"><?= number_format($sale['discount_percent'], 2) ?></td>
+        </tr>
+        <tr>
+            <td><strong>Total Paid</strong></td>
+            <td class="right bold"><?= number_format($sale['total_amount'], 2) ?></td>
+        </tr>
+    </table>
+
+    <div class="line"></div>
+
+    <p class="center">Approval Code: #<?= str_pad($sale['id'], 6, '0', STR_PAD_LEFT) ?></p>
+
+    <div class="line"></div>
+    <p class="center bold">THANK YOU FOR YOUR PURCHASE!</p>
+
+    <!--
+    <div class="barcode">
+        <img src="https://barcode.tec-it.com/barcode.ashx?data=<?= $sale['id'] ?>&code=Code128&translate-esc=false" alt="barcode" />
+>>>>>>> Stashed changes
     </div>
 </div>
 

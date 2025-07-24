@@ -669,6 +669,7 @@ try {
     customerTypeClientRadio.addEventListener('change', handleCustomerTypeChange);
     customerTypeVisitorRadio.addEventListener('change', handleCustomerTypeChange);
 
+<<<<<<< Updated upstream
     patientSearchInput.addEventListener('keyup', searchPatients);
     addProductBtn.addEventListener('click', addProductToSale);
     completeSaleBtn.addEventListener('click', completeSale);
@@ -677,6 +678,52 @@ try {
     document.addEventListener('click', (event) => {
         if (!patientSearchInput.contains(event.target) && !patientSearchResults.contains(event.target)) {
             patientSearchResults.classList.add('hidden');
+=======
+            <label class="label-field">Membership:
+                <select name="membership" id="membership" onchange="calculateTotal()" class="select-field">
+                    <option value="No membership">No membership</option>
+                    <option value="Silver">Silver</option>
+                    <option value="Gold">Gold</option>
+                    <option value="Platinum">Platinum</option>
+                </select>
+            </label>
+        </fieldset>
+
+        <!-- Product Selection -->
+        <fieldset class="form-section product-section">
+            <legend class="section-title">Products</legend>
+            <div id="product-rows" class="product-rows"></div>
+            <button type="button" onclick="addProductRow()" class="btn add-product-btn">+Add Product</button>
+        </fieldset>
+
+        <!-- Totals -->
+        <fieldset class="form-section total-section">
+            <legend class="section-title">Total</legend>
+            <label class="label-field">Total:
+                <input type="text" id="total" name="total" readonly class="input-field readonly-field">
+            </label><br>
+
+            <label class="label-field">Discount:
+                <input type="text" id="discount" name="discount" readonly class="input-field readonly-field">
+            </label><br>
+
+            <label class="label-field">Final Payable:
+                <input type="text" id="final_total" name="final_total" readonly class="input-field readonly-field">
+            </label>
+        </fieldset>
+
+        <button type="submit" class="btn submit-btn">Submit Sale</button>
+    </form>
+
+    <script>
+        <?php
+        // Pass PHP products array to JS
+        echo "productData = {";
+        foreach ($products as $p) {
+            $name = addslashes($p['product_name']);
+            $price = (float) $p['price'];
+            echo "'{$p['id']}': {name: '{$name}', price: {$price}},";
+>>>>>>> Stashed changes
         }
     });
 

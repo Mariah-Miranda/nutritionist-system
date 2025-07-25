@@ -66,20 +66,25 @@ echo '</script>';
 <style>
     /* General styles for the receipt area */
     #receipt-area {
-        max-width: 800px; /* Standard page width */
-        margin: 20px auto; /* Center the receipt with margins */
+        max-width: 300px; /* Typical width for thermal printer */
+        margin: 0 auto; /* Center the receipt */
         background-color: #fff;
-        padding: 20px; /* Standard padding */
-        font-family: 'Inter', sans-serif; /* Use Inter font */
-        color: #333;
-        font-size: 14px; /* Standard font size */
-        line-height: 1.5;
-        border-radius: 0.75rem; /* rounded-lg */
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+        padding: 10px; /* Smaller padding for compact look */
+        font-family: 'monospace', 'Courier New', Courier, monospace; /* Monospace font for classic POS look */
+        color: #000;
+        font-size: 12px; /* Base font size for POS */
+        line-height: 1.2;
     }
 
     /* Hide elements not needed for print */
     @media print {
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: auto; /* Allow content to define height */
+            overflow: visible; /* Ensure content is not hidden by overflow */
+        }
         body * {
             visibility: hidden;
         }
@@ -87,16 +92,16 @@ echo '</script>';
             visibility: visible;
         }
         #receipt-area {
-            position: absolute;
-            left: 0;
-            top: 0;
+            /* Removed position: absolute; to allow natural flow */
             width: 100%;
             margin: 0;
             padding: 0;
             box-shadow: none;
             border-radius: 0;
-            font-size: 12px; /* Slightly smaller for print */
-            line-height: 1.3;
+            font-size: 10px; /* Even smaller for print */
+            line-height: 1;
+            min-height: 100px; /* Ensure it takes up some space */
+            display: block; /* Ensure it's treated as a block element */
         }
         .no-print {
             display: none;
@@ -113,7 +118,7 @@ echo '</script>';
             border-collapse: collapse;
         }
         th, td {
-            padding: 4px 0; /* Compact padding for table cells */
+            padding: 2px 0; /* Compact padding for table cells */
             border: none; /* No borders in print */
         }
         .text-right {
@@ -149,309 +154,166 @@ echo '</script>';
         }
     }
 
-    /* Standard page styles */
+    /* Specific styles for the POS look */
     .receipt-header, .receipt-footer {
         text-align: center;
-        margin-bottom: 20px;
-    }
-    .receipt-header h2 {
-        font-size: 2.25rem; /* text-3xl */
-        font-weight: 700; /* font-bold */
-        color: #1f2937; /* gray-800 */
-        margin-bottom: 1.5rem; /* mb-6 */
-    }
-    .receipt-header p {
-        font-size: 0.875rem; /* text-sm */
-        color: #6b7280; /* gray-500 */
+        margin-bottom: 10px;
     }
     .receipt-info, .receipt-summary {
-        margin-bottom: 20px;
-    }
-    .receipt-info p, .receipt-summary div {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px; /* mb-2 */
-        color: #4b5563; /* gray-700 */
-    }
-    .receipt-info p span, .receipt-summary div span {
-        font-weight: 600; /* font-semibold */
-        color: #1f2937; /* gray-800 */
+        margin-bottom: 10px;
     }
     .receipt-item-table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
     .receipt-item-table th, .receipt-item-table td {
-        padding: 0.75rem; /* p-3 */
+        padding: 2px 0;
         text-align: left;
-        border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
-        color: #374151; /* gray-700 */
     }
-    .receipt-item-table th {
-        background-color: #f9fafb; /* bg-gray-50 */
-        font-weight: 600; /* font-semibold */
-        text-transform: uppercase;
-        font-size: 0.75rem; /* text-xs */
-        color: #6b7280; /* gray-600 */
+    .receipt-item-table th:nth-child(2),
+    .receipt-item-table td:nth-child(2) { /* Qty column */
+        text-align: center;
     }
-    .receipt-item-table td {
-        font-size: 0.875rem; /* text-sm */
-    }
-    .receipt-item-table td:nth-child(2),
+    .receipt-item-table th:nth-child(3),
     .receipt-item-table td:nth-child(3),
-    .receipt-item-table td:nth-child(4) {
+    .receipt-item-table th:nth-child(4),
+    .receipt-item-table td:nth-child(4) { /* Price and Subtotal columns */
         text-align: right;
     }
 
-    .receipt-summary .total {
+    .receipt-summary div {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        font-size: 1.25rem; /* text-xl */
-        font-weight: 700; /* font-bold */
-        color: #111827; /* gray-900 */
-        border-top: 1px solid #d1d5db; /* border-t border-gray-300 */
-        padding-top: 0.5rem; /* pt-2 */
-        margin-top: 0.5rem; /* mt-2 */
+        margin-bottom: 2px;
     }
-    .receipt-summary .total span:last-child {
-        font-weight: 800; /* font-extrabold */
+    .receipt-summary .total {
+        font-size: 1.2em;
+        font-weight: bold;
+        border-top: 1px dashed #000;
+        padding-top: 5px;
+        margin-top: 5px;
     }
 </style>
 
-<div class="container mx-auto p-4 lg:p-8">
-    <div id="receipt-area" class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
+<div class="container mx-auto p-4 md:p-8 no-print">
+    <div id="receipt-area" class="bg-white rounded-lg shadow-lg p-6 md:p-8">
         <div class="receipt-header">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Sale Receipt</h2>
-            <p class="text-sm text-gray-500">SMART FOOD, Kampala, Uganda</p>
-            <p class="text-sm text-gray-500">Phone: +123 456 7890 | Email: info@smartfood.com</p>
-            <p class="text-sm text-gray-500">Receipt #<?php echo htmlspecialchars($sale_id); ?></p>
-            <p class="text-sm text-gray-500">Date: <?php echo htmlspecialchars(date('Y-m-d H:i:s', strtotime($sale['sale_date'] ?? 'now'))); ?></p>
-            <hr class="my-4 border-gray-200">
+            <h2 class="text-xl font-bold"><?php echo htmlspecialchars(SITE_NAME); ?></h2>
+            <p class="text-xs">SMART FOOD, Kampala, Uganda</p>
+            <p class="text-xs">Phone: +123 456 7890 | Email: info@example.com</p>
+            <p class="text-md font-semibold mt-2">SALE RECEIPT</p>
+            <p class="text-sm">Receipt #<?php echo htmlspecialchars($sale_id); ?></p>
+            <p class="text-sm">Date: <?php echo htmlspecialchars(date('Y-m-d H:i:s', strtotime($sale['sale_date'] ?? 'now'))); ?></p>
+            <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
         </div>
 
         <?php if ($sale): ?>
-            <div class="mb-6 border border-gray-200 rounded-lg p-4">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Customer Details</h3>
-                <div class="receipt-info">
-                    <?php if ($sale['customer_type'] === 'Patient'): ?>
-                        <p>Customer Type: <span>Patient</span></p>
-                        <p>Patient Name: <span><?php echo htmlspecialchars($sale['full_name'] ?? 'N/A'); ?></span></p>
-                        <p>Patient ID: <span><?php echo htmlspecialchars($sale['patient_unique_id'] ?? 'N/A'); ?></span></p>
-                        <p>Membership Status: <span><?php echo htmlspecialchars($sale['membership_status'] ?? 'N/A'); ?></span></p>
-                    <?php else: ?>
-                        <p>Customer Type: <span><?php echo htmlspecialchars($sale['customer_type']); ?></span></p>
-                        <p>Customer Name: <span><?php echo htmlspecialchars($sale['customer_name'] ?? 'N/A'); ?></span></p>
-                        <?php if (!empty($sale['customer_phone'])): ?>
-                            <p>Customer Phone: <span><?php echo htmlspecialchars($sale['customer_phone']); ?></span></p>
-                        <?php endif; ?>
+            <div class="receipt-info">
+                <?php if ($sale['customer_type'] === 'Patient'): ?>
+                    <p>Customer: <?php echo htmlspecialchars($sale['full_name'] ?? 'N/A'); ?> (Patient)</p>
+                    <p>Patient ID: <?php echo htmlspecialchars($sale['patient_unique_id'] ?? 'N/A'); ?></p>
+                    <p>Membership: <?php echo htmlspecialchars($sale['membership_status'] ?? 'N/A'); ?></p>
+                <?php else: ?>
+                    <p>Customer: <?php echo htmlspecialchars($sale['customer_name'] ?? 'Visitor'); ?></p>
+                    <?php if (!empty($sale['customer_phone'])): ?>
+                        <p>Phone: <?php echo htmlspecialchars($sale['customer_phone']); ?></p>
                     <?php endif; ?>
-                    <?php if (!empty($_SESSION['username'])): ?>
-                    <p>Cashier: <span><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
-                    <?php endif; ?>
-                </div>
+                <?php endif; ?>
+                <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
             </div>
 
-            <div class="mb-6 border border-gray-200 rounded-lg p-4">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Sale Items</h3>
-                <table class="receipt-item-table w-full">
+            <div class="receipt-items">
+                <table class="receipt-item-table">
                     <thead>
                         <tr>
-                            <th class="py-2 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Product</th>
-                            <th class="py-2 px-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Quantity</th>
-                            <th class="py-2 px-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Price</th>
-                            <th class="py-2 px-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Subtotal</th>
+                            <th>Item</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!empty($sale_items)): ?>
                             <?php foreach ($sale_items as $item): ?>
-                                <tr class="bg-white">
-                                    <td class="py-3 px-4 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo htmlspecialchars($item['product_name']); ?></td>
-                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700 text-right"><?php echo htmlspecialchars($item['quantity']); ?></td>
-                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700 text-right"><?php echo DEFAULT_CURRENCY . ' ' . number_format($item['price'], 2); ?></td>
-                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700 text-right"><?php echo DEFAULT_CURRENCY . ' ' . number_format($item['subtotal'], 2); ?></td>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($item['product_name']); ?></td>
+                                    <td class="text-center"><?php echo htmlspecialchars($item['quantity']); ?></td>
+                                    <td class="text-right"><?php echo number_format($item['price'], 2); ?></td>
+                                    <td class="text-right"><?php echo number_format($item['subtotal'], 2); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr class="bg-white">
-                                <td colspan="4" class="py-3 px-4 text-center text-sm text-gray-600">No items found for this sale.</td>
+                            <tr>
+                                <td colspan="4" class="text-center">No items found.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
+                <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
             </div>
 
-            <div class="mb-6 border border-gray-200 rounded-lg p-4">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Summary</h3>
-                <div class="receipt-summary">
-                    <?php
-                        // Recalculate totals for accurate display
-                        $subtotal_before_item_discounts = array_reduce($sale_items, function($sum, $item) {
-                            return $sum + ($item['price'] * $item['quantity']);
-                        }, 0);
-                        
-                        $total_item_discounts = array_reduce($sale_items, function($sum, $item) {
-                            // This assumes subtotal = (price * qty) - discount
-                            $item_subtotal = $item['price'] * $item['quantity'];
-                            $item_discount = $item_subtotal - $item['subtotal'];
-                            return $sum + $item_discount;
-                        },0);
+            <div class="receipt-summary">
+                 <?php
+                    // Recalculate totals for accurate display
+                    $subtotal_before_item_discounts = array_reduce($sale_items, function($sum, $item) {
+                        return $sum + ($item['price'] * $item['quantity']);
+                    }, 0);
+                    
+                    $total_item_discounts = array_reduce($sale_items, function($sum, $item) {
+                        // This assumes subtotal = (price * qty) - discount
+                        $item_subtotal = $item['price'] * $item['quantity'];
+                        $item_discount = $item_subtotal - $item['subtotal'];
+                        return $sum + $item_discount;
+                    },0);
 
-                        $subtotal_after_item_discounts = $subtotal_before_item_discounts - $total_item_discounts;
+                    $subtotal_after_item_discounts = $subtotal_before_item_discounts - $total_item_discounts;
 
-                        $member_discount_amount = $subtotal_after_item_discounts * ((float)($sale['discount_percent'] ?? 0) / 100);
-                        $subtotal_after_member_discount = $subtotal_after_item_discounts - $member_discount_amount;
-                        $tax_amount = $subtotal_after_member_discount * (TAX_RATE_PERCENT / 100);
-                    ?>
-                    <div>
-                        <span>Subtotal:</span>
-                        <span class="font-semibold text-gray-800"><?php echo DEFAULT_CURRENCY . ' ' . number_format($subtotal_before_item_discounts, 2); ?></span>
-                    </div>
-                    <?php if ($total_item_discounts > 0): ?>
-                    <div>
-                        <span>Item Discounts:</span>
-                        <span class="font-semibold text-gray-800">- <?php echo DEFAULT_CURRENCY . ' ' . number_format($total_item_discounts, 2); ?></span>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ($member_discount_amount > 0): ?>
-                    <div>
-                        <span>Member Discount (<?php echo htmlspecialchars($sale['discount_percent']); ?>%):</span>
-                        <span class="font-semibold text-gray-800">- <?php echo DEFAULT_CURRENCY . ' ' . number_format($member_discount_amount, 2); ?></span>
-                    </div>
-                    <?php endif; ?>
-                    <div>
-                        <span>Tax (<?php echo htmlspecialchars(TAX_RATE_PERCENT); ?>%):</span>
-                        <span class="font-semibold text-gray-800">+ <?php echo DEFAULT_CURRENCY . ' ' . number_format($tax_amount, 2); ?></span>
-                    </div>
-                    <div class="total">
-                        <span>Total Amount:</span>
-                        <span class="font-extrabold"><?php echo DEFAULT_CURRENCY . ' ' . number_format($sale['total_amount'], 2); ?></span>
-                    </div>
-                    <p class="text-sm text-gray-700 mt-2">Payment Method: <span class="font-semibold"><?php echo htmlspecialchars($sale['payment_method'] ?? 'N/A'); ?></span></p>
+                    $member_discount_amount = $subtotal_after_item_discounts * ($sale['discount_percent'] / 100);
+                    $subtotal_after_member_discount = $subtotal_after_item_discounts - $member_discount_amount;
+                    $tax_amount = $subtotal_after_member_discount * (TAX_RATE_PERCENT / 100);
+                ?>
+                <div>
+                    <span>Subtotal:</span>
+                    <span class="font-bold"><?php echo DEFAULT_CURRENCY . ' ' . number_format($subtotal_before_item_discounts, 2); ?></span>
                 </div>
+                <div>
+                    <span>Item Discounts:</span>
+                    <span class="font-bold">- <?php echo DEFAULT_CURRENCY . ' ' . number_format($total_item_discounts, 2); ?></span>
+                </div>
+                <div>
+                    <span>Member Discount (<?php echo htmlspecialchars($sale['discount_percent']); ?>%):</span>
+                    <span class="font-bold">- <?php echo DEFAULT_CURRENCY . ' ' . number_format($member_discount_amount, 2); ?></span>
+                </div>
+                <div>
+                    <span>Tax (<?php echo htmlspecialchars(TAX_RATE_PERCENT); ?>%):</span>
+                    <span class="font-bold">+ <?php echo DEFAULT_CURRENCY . ' ' . number_format($tax_amount, 2); ?></span>
+                </div>
+                <div class="total">
+                    <span>TOTAL:</span>
+                    <span class="font-extrabold"><?php echo DEFAULT_CURRENCY . ' ' . number_format($sale['total_amount'], 2); ?></span>
+                </div>
+                <p class="text-sm text-center mt-2">Payment Method: <?php echo htmlspecialchars($sale['payment_method'] ?? 'N/A'); ?></p>
+                <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
             </div>
 
-            <div class="text-center py-4">
-                <p class="text-gray-600 text-sm">Thank you for your purchase!</p>
-                <p class="text-gray-600 text-xs mt-1">Please come again.</p>
+            <div class="receipt-footer">
+                <p class="text-sm">Thank you for your purchase!</p>
+                <p class="text-xs">Please come again.</p>
             </div>
 
-<<<<<<< Updated upstream
         <?php else: ?>
             <div class="text-center py-8">
                 <p class="text-gray-600 text-lg">Sale receipt not found or invalid sale ID.</p>
             </div>
         <?php endif; ?>
-=======
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 12px;
-    }
-
-    td, th {
-        padding: 6px 4px;
-        font-size: 14px;
-        margin-right: 10px;
-    }
-
-    .right {
-        text-align: right;
-    }
-
-    .barcode {
-        text-align: center;
-        margin-top: 15px;
-    }
-
-    button {
-        margin-top: 15px;
-    }
-
-    @media print {
-        button {
-            display: none;
-        }
-    }
-</style>
-
-</head>
-<body>
- 
- 
-
-    <h2 class="bold">SMART FOODS LTD</h2>
-    <p>P.O BOX 5568</p>
-    <p>Makerere, Kampala</p>
-    <p>Tel:+256 702 285 608</p>
-
-    <div class="line"></div>
-    <h3>CASH RECEIPT</h3>
-    <div class="line"></div>
-
-    <p><span class="bold">Client:</span> <?= htmlspecialchars($sale['name']) ?> (<?= htmlspecialchars($sale['phone']) ?>)</p>
-    <p><span class="bold">Membership:</span> <?= htmlspecialchars($sale['membership']) ?></p>
-    <p><span class="bold">Date:</span> <?= htmlspecialchars($sale['sale_date']) ?></p>
-
-    <div class="line"></div>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="text-align:left;">Item</th>
-                <th class="right">Qty</th>
-                <th class="right">Price</th>
-                <th class="right">Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $total = 0; foreach ($items as $row): ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['product_name']) ?></td>
-                    <td class="right"><?= $row['quantity'] ?></td>
-                    <td class="right"><?= number_format($row['price'], 2) ?></td>
-                    <td class="right"><?= number_format($row['subtotal'], 2) ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <div class="line"></div>
-
-    <table>
-        <tr>
-            <td><strong>Subtotal</strong></td>
-            <td class="right"><?= number_format($sale['total_amount'] + $sale['discount_percent'], 2) ?></td>
-        </tr>
-        <tr>
-            <td><strong>Discount</strong></td>
-            <td class="right"><?= number_format($sale['discount_percent'], 2) ?></td>
-        </tr>
-        <tr>
-            <td><strong>Total Paid</strong></td>
-            <td class="right bold"><?= number_format($sale['total_amount'], 2) ?></td>
-        </tr>
-    </table>
-
-    <div class="line"></div>
-
-    <p class="center">Approval Code: #<?= str_pad($sale['id'], 6, '0', STR_PAD_LEFT) ?></p>
-
-    <div class="line"></div>
-    <p class="center bold">THANK YOU FOR YOUR PURCHASE!</p>
-
-    <!--
-    <div class="barcode">
-        <img src="https://barcode.tec-it.com/barcode.ashx?data=<?= $sale['id'] ?>&code=Code128&translate-esc=false" alt="barcode" />
->>>>>>> Stashed changes
     </div>
 
     <div class="flex justify-center mt-6 no-print">
         <?php if ($sale): ?>
+            <!-- This button now triggers the POS receipt print -->
             <button onclick="printPosReceipt(<?php echo htmlspecialchars($sale_id); ?>)" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg mr-4">
-                <i class="fas fa-print mr-2"></i> Print POS Receipt
+                <i class="fas fa-print mr-2"></i> Print Receipt
             </button>
         <?php endif; ?>
         <a href="new.php" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mr-2">New Sale</a>
@@ -461,14 +323,21 @@ echo '</script>';
 
 <script>
     function printPosReceipt(saleId) {
+        // Open the new POS receipt page in a new window/tab
         const printWindow = window.open(`pos_receipt_print.php?sale_id=${saleId}`, '_blank', 'width=320,height=600,scrollbars=yes,resizable=yes');
+        
+        // Optional: Focus the new window and ensure it prints
         if (printWindow) {
             printWindow.focus();
+            // The window.print() call is now inside pos_receipt_print.php
         } else {
+            // Use a custom message box instead of alert
             showMessage('Pop-up Blocked', 'Please allow pop-ups for this site to print the POS receipt.');
         }
     }
 
+    // You might need to define showMessage if it's not globally available from new.php
+    // If new.php and receipt.php are completely separate, copy the function here:
     function showMessage(title, message) {
         const messageBox = document.getElementById('messageBox');
         const messageBoxTitle = document.getElementById('messageBoxTitle');
@@ -482,6 +351,7 @@ echo '</script>';
             messageBoxCloseBtn.onclick = () => messageBox.classList.add('hidden');
         } else {
             console.error("Message box elements not found. Cannot display message.");
+            // Fallback to alert if custom message box isn't available
             alert(`${title}\n\n${message}`);
         }
     }

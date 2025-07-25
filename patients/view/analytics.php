@@ -91,7 +91,7 @@ try {
     error_log("ERROR: Could not fetch patient analytics data: " . $e->getMessage());
     $message = "Error loading patient analytics. Please try again later.";
     $_SESSION['error_message'] = $message;
-    header('Location: ' . BASE_URL . '../view.php?id=' . $patient_id); // Redirect back to patient view
+    header('Location: ' . BASE_URL . 'view.php?id=' . $patient_id); // Redirect back to patient view
     exit();
 }
 

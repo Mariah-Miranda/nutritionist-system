@@ -209,7 +209,7 @@ require_once __DIR__ . '/../includes/header.php';
         <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Patient Progress & Analytics</h3>
         <p class="text-gray-600">
             This section will display charts and detailed analytics for the patient's health progress over time.
-            <a href="<?php echo BASE_URL; ?>view/analytics.php?id=<?php echo $patient['patient_id']; ?>" class="text-blue-600 hover:underline">View detailed analytics</a>.
+            <a href="<?php echo BASE_URL; ?>analytics.php?id=<?php echo $patient['patient_id']; ?>" class="text-blue-600 hover:underline">View detailed analytics</a>.
         </p>
         <!-- Data for JS charts will be passed here or fetched via AJAX -->
         <script>

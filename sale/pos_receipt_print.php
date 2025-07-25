@@ -46,7 +46,8 @@ header("Expires: 0");
 // --- Adapt variables from your provided receipt.php to match current data ---
 $orderno = htmlspecialchars($sale['id'] ?? 'N/A'); // Using sale ID as order number
 $remarks = 'Sale Transaction'; // Generic remark
-$cashier_name = $_SESSION['username'] ?? ''; // Get username from session, default to empty string
+// Ensure cashier_name always has a value, even if session username is empty
+$cashier_name = !empty($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'N/A';
 $order_date = date('Y-m-d H:i:s', strtotime($sale['sale_date'] ?? 'now'));
 $date_completed = date('Y-m-d H:i:s', strtotime($sale['sale_date'] ?? 'now')); // Using sale_date as completion date
 
@@ -250,12 +251,10 @@ $payment_status_db = htmlspecialchars($sale['payment_method'] ?? 'N/A'); // Usin
                 <td class="text-right"><?php echo htmlspecialchars($sale['customer_phone']); ?></td>
             </tr>
             <?php endif; ?>
-            <?php if (!empty($cashier_name)): // Conditionally display Cashier ?>
             <tr>
                 <td>Cashier:</td>
                 <td class="text-right"><?php echo $cashier_name; ?></td>
             </tr>
-            <?php endif; ?>
             <tr>
                 <td>Print Date:</td>
                 <td class="text-right"><?php echo date('d/m/Y H:i:s'); ?></td>
@@ -325,30 +324,6 @@ $payment_status_db = htmlspecialchars($sale['payment_method'] ?? 'N/A'); // Usin
             <tr> 
                 <td class="text-right">TOTAL:</td>
                 <td class="text-right" style="font-weight: bold; font-size: 1.2em;"><?php echo number_format($total_amount_due_db, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
-            </tr>
-            <tr> 
-                <td class="text-right">Previous Paid:</td>
-                <td class="text-right"><?php echo number_format($previous_paid_amount, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
-            </tr>
-            <tr> 
-                <td class="text-right">Amount Tendered (this transaction):</td>
-                <td class="text-right" style="font-weight: bold;"><?php echo number_format($tender_amount_this_transaction, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
-            </tr>
-            <tr> 
-                <td class="text-right">Total Paid:</td>
-                <td class="text-right" style="font-weight: bold;"><?php echo number_format($total_paid_after_this_transaction, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
-            </tr>
-            <tr> 
-                <td class="text-right">Balance Due:</td>
-                <td class="text-right" style="font-weight: bold;"><?php echo number_format($balance_due_db, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
-            </tr>
-            <tr> 
-                <td class="text-right">Payment Status:</td>
-                <td class="text-right" style="font-weight: bold;"><?php echo $payment_status_db; ?></td>
-            </tr>
-            <tr>
-                <td class="text-right">Change:</td>
-                <td class="text-right" style="font-weight: bold;"><?php echo number_format($change_amount_this_transaction, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
             </tr>
         </table>
         

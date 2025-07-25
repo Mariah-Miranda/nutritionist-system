@@ -1,10 +1,11 @@
 <?php
 // sales/process_sale.php
 
-// TEMPORARY: Enable detailed error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// IMPORTANT: For production, you should set display_errors to 0
+// and log errors to a file. For debugging, temporarily enabling E_ALL
+// is fine, but for AJAX responses, NO output before JSON is critical.
+ini_set('display_errors', 0); // Suppress display of errors for AJAX response
+error_reporting(E_ALL & ~E_DEPRECATED); // Log all errors except deprecation warnings
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db_connect.php';
@@ -23,16 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Get customer type and related data
-    $customer_type = filter_input(INPUT_POST, 'customer_type', FILTER_SANITIZE_STRING);
-    $patient_id = filter_input(INPUT_POST, 'patient_id', FILTER_VALIDATE_INT); // Will be null if not 'Patient'
-    $customer_name = filter_input(INPUT_POST, 'customer_name', FILTER_SANITIZE_STRING); // Will be null if 'Patient'
-    $customer_phone = filter_input(INPUT_POST, 'customer_phone', FILTER_SANITIZE_STRING); // Will be null if 'Patient'
+    // Replaced FILTER_SANITIZE_STRING. For strings, rely on PDO prepared statements for safety.
+    // Use null coalescing operator (??) for robustness.
+    $customer_type = $_POST['customer_type'] ?? '';
+    $patient_id = filter_input(INPUT_POST, 'patient_id', FILTER_VALIDATE_INT);
+    $customer_name = $_POST['customer_name'] ?? '';
+    $customer_phone = $_POST['customer_phone'] ?? '';
 
     // Get sale details
     $total_amount = filter_input(INPUT_POST, 'total_amount', FILTER_VALIDATE_FLOAT);
     $discount_percent = filter_input(INPUT_POST, 'discount_percent', FILTER_VALIDATE_FLOAT);
-    $payment_method = filter_input(INPUT_POST, 'payment_method', FILTER_SANITIZE_STRING);
-    $sale_items_json = $_POST['sale_items'] ?? '[]'; // JSON string of sale items
+    $payment_method = $_POST['payment_method'] ?? ''; // Replaced FILTER_SANITIZE_STRING
 
     // Basic validation for sale details
     if ($total_amount === false || $total_amount < 0 || $discount_percent === false || $discount_percent < 0 || empty($payment_method)) {
@@ -68,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $patient_id = null;
     }
 
-    $sale_items = json_decode($sale_items_json, true);
+    $sale_items = json_decode($_POST['sale_items'] ?? '[]', true);
     if (json_last_error() !== JSON_ERROR_NONE || !is_array($sale_items) || empty($sale_items)) {
         $response['message'] = 'Invalid or empty sale items data.';
         echo json_encode($response);
@@ -90,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $patient_id, // This will be NULL for Client/Visitor, and patient_id for Patient
             $discount_percent,
             $total_amount,
-            $payment_method // This column is now expected in the table
+            $payment_method
         ]);
         $sale_id = $pdo->lastInsertId();
 
@@ -136,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         $pdo->rollBack();
         $response['message'] = 'Sale processing failed: ' . $e->getMessage();
-        error_log("Sale Process Error: " . $e->getMessage());
+        error_log("Sale Process Error: " . $e->getMessage()); // Log the error to your server logs
     }
 } else {
     $response['message'] = 'Invalid request method.';

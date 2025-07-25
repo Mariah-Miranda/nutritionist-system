@@ -118,12 +118,10 @@ try {
 
     } else {
         // INSERT new patient
-        $patient_unique_id = 'PAT-' . date('Ymd') . '-' . uniqid();
+        // Insert patient first to get the auto-incremented patient_id
+        $stmt = $pdo->prepare("INSERT INTO patients (full_name, date_of_birth, gender, height_cm, address, email, phone, health_conditions, membership_status)
+                               VALUES (:full_name, :date_of_birth, :gender, :height_cm, :address, :email, :phone, :health_conditions, :membership_status)");
 
-        $stmt = $pdo->prepare("INSERT INTO patients (patient_unique_id, full_name, date_of_birth, gender, height_cm, address, email, phone, health_conditions, membership_status)
-                               VALUES (:patient_unique_id, :full_name, :date_of_birth, :gender, :height_cm, :address, :email, :phone, :health_conditions, :membership_status)");
-
-        $stmt->bindParam(':patient_unique_id', $patient_unique_id);
         $stmt->bindParam(':full_name', $full_name);
         $stmt->bindParam(':date_of_birth', $date_of_birth);
         $stmt->bindParam(':gender', $gender);
@@ -137,6 +135,16 @@ try {
         $stmt->execute();
         $new_patient_id = $pdo->lastInsertId(); // Get the auto-generated patient_id
         $patient_id_for_redirect = $new_patient_id; // Set patient_id for redirection
+
+        // Generate the patient_unique_id using the new_patient_id
+        $patient_unique_id = 'SFPAT_' . sprintf('%05d', $new_patient_id);
+
+        // Update the newly inserted patient with the generated unique ID
+        $stmt_update_unique_id = $pdo->prepare("UPDATE patients SET patient_unique_id = :patient_unique_id WHERE patient_id = :patient_id");
+        $stmt_update_unique_id->bindParam(':patient_unique_id', $patient_unique_id);
+        $stmt_update_unique_id->bindParam(':patient_id', $new_patient_id, PDO::PARAM_INT);
+        $stmt_update_unique_id->execute();
+
 
         // Insert Initial Health Metrics
         if ($weight_kg > 0 || $bmi !== null || $systolic_bp > 0 || $diastolic_bp > 0 || $blood_sugar_level_mg_dL > 0) {
@@ -155,7 +163,8 @@ try {
         }
 
         $message = 'Patient added successfully!';
-        $redirectUrl = BASE_URL . 'list.php?message=' . urlencode($message); // Redirect to patient list
+        // Redirect to the view page of the newly added patient
+        $redirectUrl = BASE_URL . 'view.php?id=' . $patient_id_for_redirect . '&message=' . urlencode($message);
     }
 
     $pdo->commit(); // Commit the transaction
@@ -192,7 +201,10 @@ try {
     }
 
     // Set the final redirect URL to the patient's view page
-    $redirectUrl = BASE_URL . 'view.php?id=' . $patient_id_for_redirect . '&message=' . urlencode($message);
+    // This was already set correctly for new patient, but ensure it's correct for edit mode too
+    if ($is_edit_mode) {
+        $redirectUrl = BASE_URL . 'view.php?id=' . $patient_id_for_redirect . '&message=' . urlencode($message);
+    }
 
 
 } catch (Exception $e) {

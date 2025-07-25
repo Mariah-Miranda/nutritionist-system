@@ -1,41 +1,54 @@
 <?php
 // sales/search_products.php
 
-// Ensure configuration and database connection are loaded
-// Paths are relative to this file's location (sales/)
+// TEMPORARY: Enable detailed error reporting for debugging
+// IMPORTANT: Remove these lines in a production environment for security
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db_connect.php';
+// require_once __DIR__ . '/../includes/auth.php'; // Removed explicit session check for search functionality
 
-header('Content-Type: application/json'); // Set header to indicate JSON response
+header('Content-Type: application/json'); // Respond with JSON
 
-$searchTerm = $_GET['search_term'] ?? ''; // Get the search term from the GET request, default to empty string
+$searchTerm = $_GET['search_term'] ?? '';
+$products = []; // Initialize products array
 
-$products = []; // Initialize an empty array to store products
-
-// Only perform search if the search term has at least 2 characters to avoid broad searches
-if (strlen($searchTerm) >= 2) {
-    try {
-        // Prepare SQL statement to search for products by name and ensure stock is greater than 0
-        // Using LIKE for partial matching and prepared statements for security
-        $stmt = $pdo->prepare("SELECT id, product_name, price, stock 
-                               FROM products 
-                               WHERE product_name LIKE ? AND stock > 0
-                               ORDER BY product_name ASC 
-                               LIMIT 10"); // Limit results for performance
-
-        $searchParam = '%' . $searchTerm . '%'; // Add wildcards for LIKE operator
-        $stmt->execute([$searchParam]); // Execute the statement with the search term
-        $products = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all matching products as associative array
-
-    } catch (PDOException $e) {
-        // Log the error for debugging purposes (check your server's error logs)
-        error_log("Error searching products: " . $e->getMessage());
-        // Return an empty JSON array in case of a database error to prevent frontend breakage
-        echo json_encode([]);
-        exit(); // Stop script execution
-    }
+// Check if PDO connection object is available
+if (!isset($pdo) || $pdo === null) {
+    // Log error but return empty array to match search_patients.php behavior
+    error_log('Database connection not established in search_products.php.');
+    echo json_encode([]);
+    exit();
 }
 
-// Encode the products array (which might be empty) to JSON and output it
-echo json_encode($products);
+// Require a minimum search term length to prevent overly broad queries
+if (empty($searchTerm) || strlen($searchTerm) < 2) {
+    echo json_encode([]); // Return empty array if search term is too short
+    exit();
+}
+
+try {
+    // Prepare a search query to find products by name that are in stock
+    // Using LIKE with wildcards for flexible searching
+    $stmt = $pdo->prepare("SELECT id, product_name, price, stock FROM products WHERE product_name LIKE ? AND stock > 0 ORDER BY product_name ASC LIMIT 10");
+    $searchParam = '%' . $searchTerm . '%';
+    $stmt->execute([$searchParam]);
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($products); // Directly echo the products array
+
+} catch (PDOException $e) {
+    // Log the detailed database error for debugging purposes
+    error_log("Database Error in search_products.php: " . $e->getMessage());
+    // Return an empty array in case of a database error, similar to search_patients.php
+    echo json_encode([]);
+} catch (Exception $e) {
+    // Catch any other unexpected errors
+    error_log("General Error in search_products.php: " . $e->getMessage());
+    // Return an empty array in case of a general error
+    echo json_encode([]);
+}
 ?>

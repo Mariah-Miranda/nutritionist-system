@@ -82,7 +82,7 @@ require_once __DIR__ . '/../../includes/header.php';
 
     <?php echo $message; ?>
 
-    <form action="<?php echo BASE_URL; ?>admin/users/add_user.php" method="POST" class="space-y-6">
+    <form action="<?php echo BASE_URL; ?>add_user.php" method="POST" class="space-y-6">
         <div class="form-group">
             <label for="full_name" class="block text-gray-700 font-semibold mb-2">Full Name</label>
             <input type="text" id="full_name" name="full_name" value="<?php echo htmlspecialchars($_POST['full_name'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>

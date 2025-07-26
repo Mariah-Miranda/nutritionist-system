@@ -19,7 +19,7 @@ try {
 
 <h3 class="text-xl font-semibold text-gray-800 mb-4">User Management</h3>
 <div class="flex justify-end mb-4">
-    <a href="<?php echo BASE_URL; ?>admin/users/add_user.php" class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
+    <a href="<?php echo BASE_URL; ?>users/add_user.php" class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
         <i class="fas fa-plus-circle mr-2"></i> Add New User
     </a>
 </div>

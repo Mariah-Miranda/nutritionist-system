@@ -129,7 +129,8 @@ require_once __DIR__ . '/../includes/header.php';
                 <h3 class="text-xl font-semibold">Total Sales (All Time)</h3>
                 <i class="fas fa-dollar-sign text-3xl text-rose-700 opacity-85"></i>
             </div>
-            <p class="text-4xl font-bold"><?php echo htmlspecialchars(DEFAULT_CURRENCY . ' ' . number_format($totalSalesAmount, 2)); ?></p>
+            <!-- Changed number_format to 0 decimal places and font size from text-4xl to text-3xl -->
+            <p class="text-3xl font-bold"><?php echo htmlspecialchars(DEFAULT_CURRENCY . ' ' . number_format($totalSalesAmount, 0)); ?></p>
             <p class="text-sm opacity-90 mt-2 text-rose-700">Cumulative revenue generated from sales.</p>
             <a href="<?php echo BASE_URL; ?>admin/reports/sales_report.php" class="text-rose-600 hover:text-rose-800 text-sm mt-4 block underline">
                 View Sales Report <i class="fas fa-arrow-right text-xs ml-1"></i>
@@ -146,7 +147,8 @@ require_once __DIR__ . '/../includes/header.php';
                     <h4 class="text-lg font-semibold text-gray-800">Sales This Month</h4>
                     <i class="fas fa-chart-line text-2xl text-green-600"></i>
                 </div>
-                <p class="text-3xl font-bold text-green-700"><?php echo htmlspecialchars(DEFAULT_CURRENCY . ' ' . number_format($currentMonthSales, 2)); ?></p>
+                <!-- Changed number_format to 0 decimal places and font size from text-3xl to text-2xl -->
+                <p class="text-2xl font-bold text-green-700"><?php echo htmlspecialchars(DEFAULT_CURRENCY . ' ' . number_format($currentMonthSales, 0)); ?></p>
                 <p class="text-sm text-gray-600 mt-2">Total revenue for the current month.</p>
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">

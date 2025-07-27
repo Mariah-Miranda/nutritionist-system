@@ -268,19 +268,19 @@ try {
         <div class="bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
             <div class="space-y-3">
-                <a href="<?php echo BASE_URL; ?>appointments/schedule.php" class="flex items-center space-x-3 p-3 rounded-lg bg-green-100 text-green-700 font-medium hover:bg-green-200 transition-colors duration-200">
+                <a href="<?php echo BASE_URL; ?>schedule.php" class="flex items-center space-x-3 p-3 rounded-lg bg-green-100 text-green-700 font-medium hover:bg-green-200 transition-colors duration-200">
                     <i class="fas fa-plus-circle text-lg"></i>
                     <span>New Appointment</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>appointments/reschedule.php" class="flex items-center space-x-3 p-3 rounded-lg bg-blue-100 text-blue-700 font-medium hover:bg-blue-200 transition-colors duration-200">
+                <a href="<?php echo BASE_URL; ?>reschedule.php" class="flex items-center space-x-3 p-3 rounded-lg bg-blue-100 text-blue-700 font-medium hover:bg-blue-200 transition-colors duration-200">
                     <i class="fas fa-calendar-check text-lg"></i>
                     <span>Reschedule</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>appointments/send_reminders.php" class="flex items-center space-x-3 p-3 rounded-lg bg-yellow-100 text-yellow-700 font-medium hover:bg-yellow-200 transition-colors duration-200">
+                <a href="<?php echo BASE_URL; ?>send_reminders.php" class="flex items-center space-x-3 p-3 rounded-lg bg-yellow-100 text-yellow-700 font-medium hover:bg-yellow-200 transition-colors duration-200">
                     <i class="fas fa-bell text-lg"></i>
                     <span>Send Reminders</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>appointments/export_schedule.php" class="flex items-center space-x-3 p-3 rounded-lg bg-purple-100 text-purple-700 font-medium hover:bg-purple-200 transition-colors duration-200">
+                <a href="<?php echo BASE_URL; ?>export_schedule.php" class="flex items-center space-x-3 p-3 rounded-lg bg-purple-100 text-purple-700 font-medium hover:bg-purple-200 transition-colors duration-200">
                     <i class="fas fa-file-export text-lg"></i>
                     <span>Export Schedule</span>
                 </a>

@@ -4,7 +4,7 @@
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db_connect.php';
 require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../includes/functions.php'; // Assuming sanitizeInput is here
+require_once __DIR__ . '/../includes/functions.php'; // Assuming sanitizeInput and now isValidDate/isValidTime are here
 
 $pageTitle = "Reschedule Appointment";
 include_once __DIR__ . '/../includes/header.php';
@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $messageType = 'error';
     } else {
         // Validate date and time format (basic validation)
+        // These functions are now expected to be in includes/functions.php
         if (!isValidDate($new_date) || !isValidTime($new_time)) {
             $message = "Invalid date or time format.";
             $messageType = 'error';
@@ -71,18 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Helper functions (add these to includes/functions.php if not already there)
-if (!function_exists('isValidDate')) {
-    function isValidDate($dateString) {
-        return (bool)strtotime($dateString);
-    }
-}
-
-if (!function_exists('isValidTime')) {
-    function isValidTime($timeString) {
-        return (bool)strtotime("1970-01-01 " . $timeString);
-    }
-}
+// The helper functions isValidDate and isValidTime have been removed from here
+// and should now reside in includes/functions.php as per previous instructions.
 
 ?>
 
@@ -97,7 +88,6 @@ if (!function_exists('isValidTime')) {
     <?php endif; ?>
 
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" id="rescheduleForm">
-        <!-- Select Appointment -->
         <div class="mb-4">
             <label for="appointment_id" class="block text-gray-700 font-semibold mb-2">Select Appointment to Reschedule</label>
             <select id="appointment_id" name="appointment_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -118,19 +108,16 @@ if (!function_exists('isValidTime')) {
             </select>
         </div>
 
-        <!-- New Date -->
         <div class="mb-4">
             <label for="new_date" class="block text-gray-700 font-semibold mb-2">New Appointment Date</label>
             <input type="date" id="new_date" name="new_date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
 
-        <!-- New Time -->
         <div class="mb-6">
             <label for="new_time" class="block text-gray-700 font-semibold mb-2">New Appointment Time</label>
             <input type="time" id="new_time" name="new_time" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
         
-        <!-- Submit Button -->
         <div class="flex justify-end space-x-4">
             <a href="<?php echo BASE_URL; ?>index.php" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">Cancel</a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors">Reschedule</button>

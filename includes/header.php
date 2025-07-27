@@ -85,7 +85,7 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                 </ul>
             </nav>
             <div class="mt-auto">
-                <a href="<?php echo BASE_URL; ?>logout.php" class="flex items-center space-x-3 p-3 rounded-lg bg-green-600 hover:bg-green-500 transition-colors duration-200">
+                <a href="<?php echo BASE_URL; ?>../logout.php" class="flex items-center space-x-3 p-3 rounded-lg bg-green-600 hover:bg-green-500 transition-colors duration-200">
                     <i class="fas fa-sign-out-alt text-xl"></i>
                     <span class="text-lg">Logout</span>
                 </a>

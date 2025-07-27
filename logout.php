@@ -13,5 +13,5 @@ $_SESSION = [];
 session_destroy();
 
 // Redirect to the public home page
-header("Location: /nutritionist-system/index.php?message=You have been logged out.");
+header("Location: index.php?message=You have been logged out.");
 exit();

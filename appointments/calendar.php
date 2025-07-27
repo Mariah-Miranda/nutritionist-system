@@ -31,7 +31,7 @@ try {
             'title' => $appointment['title'],
             'start' => $appointment['start'],
             'color' => $color,
-            'url' => BASE_URL . 'appointments/schedule.php?edit_id=' . $appointment['appointment_id']
+            'url' => BASE_URL . 'schedule.php?edit_id=' . $appointment['appointment_id']
         ];
     }
 

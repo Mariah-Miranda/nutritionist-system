@@ -4,30 +4,11 @@
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db_connect.php';
 require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../includes/functions.php'; // Assuming sanitizeInput and now isValidDate/isValidTime are here
+require_once __DIR__ . '/../includes/functions.php'; // This file should now contain isValidDate() and isValidTime()
 
-$pageTitle = "Reschedule Appointment";
-include_once __DIR__ . '/../includes/header.php';
-
-$appointments = [];
+// Initialize variables for messages
 $message = '';
 $messageType = ''; // 'success' or 'error'
-
-// Fetch existing appointments to populate the dropdown
-try {
-    $sql = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, a.reason, p.full_name AS patient_name
-            FROM appointments a
-            JOIN patients p ON a.patient_id = p.patient_id
-            WHERE a.status = 'Scheduled'
-            ORDER BY a.appointment_date ASC, a.appointment_time ASC";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    error_log("ERROR: Could not fetch appointments for rescheduling: " . $e->getMessage());
-    $message = "Error loading appointments: " . $e->getMessage();
-    $messageType = 'error';
-}
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,8 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "Please provide a new date and time for the appointment.";
         $messageType = 'error';
     } else {
-        // Validate date and time format (basic validation)
-        // These functions are now expected to be in includes/functions.php
+        // Validate date and time format using functions from includes/functions.php
         if (!isValidDate($new_date) || !isValidTime($new_time)) {
             $message = "Invalid date or time format.";
             $messageType = 'error';
@@ -57,8 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($stmt_update->execute()) {
                     $_SESSION['success_message'] = "Appointment rescheduled successfully!";
-                    header('Location: ' . BASE_URL . 'appointments/index.php');
-                    exit();
+                    // Redirect after successful update. This must happen before any output.
+                    header('Location: ' . BASE_URL . 'index.php'); // Changed redirect path to index.php
+                    exit(); // It's crucial to exit after a header redirect
                 } else {
                     $message = "Failed to reschedule appointment. Please try again.";
                     $messageType = 'error';
@@ -72,8 +53,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// The helper functions isValidDate and isValidTime have been removed from here
-// and should now reside in includes/functions.php as per previous instructions.
+// Fetch existing appointments to populate the dropdown
+$appointments = []; // Initialize to an empty array
+try {
+    $sql = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, a.reason, p.full_name AS patient_name
+            FROM appointments a
+            JOIN patients p ON a.patient_id = p.patient_id
+            WHERE a.status = 'Scheduled'
+            ORDER BY a.appointment_date ASC, a.appointment_time ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("ERROR: Could not fetch appointments for rescheduling: " . $e->getMessage());
+    $message = "Error loading appointments: " . $e->getMessage();
+    $messageType = 'error'; // Set error message if fetching fails
+}
+
+// Set page title and include header AFTER all potential redirects
+$pageTitle = "Reschedule Appointment";
+include_once __DIR__ . '/../includes/header.php';
 
 ?>
 
@@ -88,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" id="rescheduleForm">
+        <!-- Select Appointment -->
         <div class="mb-4">
             <label for="appointment_id" class="block text-gray-700 font-semibold mb-2">Select Appointment to Reschedule</label>
             <select id="appointment_id" name="appointment_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -108,16 +108,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </select>
         </div>
 
+        <!-- New Date -->
         <div class="mb-4">
             <label for="new_date" class="block text-gray-700 font-semibold mb-2">New Appointment Date</label>
             <input type="date" id="new_date" name="new_date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
 
+        <!-- New Time -->
         <div class="mb-6">
             <label for="new_time" class="block text-gray-700 font-semibold mb-2">New Appointment Time</label>
             <input type="time" id="new_time" name="new_time" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
         
+        <!-- Submit Button -->
         <div class="flex justify-end space-x-4">
             <a href="<?php echo BASE_URL; ?>index.php" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">Cancel</a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors">Reschedule</button>
@@ -158,7 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         rescheduleForm.addEventListener('submit', function(event) {
             if (appointmentSelect.value === "") {
                 event.preventDefault(); // Prevent form submission
-                alert("Please select an appointment to reschedule."); // Use alert for simplicity, consider a custom modal in production
+                // Using a custom modal or message box is preferred over alert() in production.
+                // For simplicity as per the original code, alert() is kept here.
+                alert("Please select an appointment to reschedule."); 
                 appointmentSelect.focus();
             }
         });

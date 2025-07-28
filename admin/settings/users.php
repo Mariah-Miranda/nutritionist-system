@@ -97,9 +97,20 @@ try {
                             <?php echo $user['last_login'] ? htmlspecialchars(date('M d, Y H:i', strtotime($user['last_login']))) : 'N/A'; ?>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="<?php echo BASE_URL; ?>admin/users/edit_user.php?id=<?php echo $user['user_id']; ?>" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                            <a href="#" onclick="showCustomConfirm('Are you sure you want to delete user &quot;<?php echo htmlspecialchars($user['full_name']); ?>&quot;?', function(confirmed) { if(confirmed) { window.location.href = '<?php echo BASE_URL; ?>admin/users/delete_user.php?id=<?php echo $user['user_id']; ?>'; } }); return false;" class="text-red-600 hover:text-red-900">Delete</a>
-                        </td>
+    <a href="<?php echo BASE_URL; ?>users/edit_user.php?id=<?php echo $user['user_id']; ?>" 
+       class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+    
+    <a href="#" 
+       onclick="showCustomConfirm(
+           'Are you sure you want to delete user &quot;<?php echo htmlspecialchars(addslashes($user['full_name'])); ?>&quot;?', 
+           function(confirmed) {
+               if (confirmed) {
+                   window.location.href = '<?php echo BASE_URL; ?>admin/users/delete_user.php?id=<?php echo $user['user_id']; ?>';
+               }
+           }); return false;" 
+       class="text-red-600 hover:text-red-900">Delete</a>
+</td>
+
                     </tr>
                 <?php endforeach; ?>
             </tbody>

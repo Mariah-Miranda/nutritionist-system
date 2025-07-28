@@ -280,7 +280,7 @@ try {
                     <i class="fas fa-bell text-lg"></i>
                     <span>Send Reminders</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>export_schedule.php" class="flex items-center space-x-3 p-3 rounded-lg bg-purple-100 text-purple-700 font-medium hover:bg-purple-200 transition-colors duration-200">
+                <a href="<?php echo BASE_URL; ?>export_schedules.php" class="flex items-center space-x-3 p-3 rounded-lg bg-purple-100 text-purple-700 font-medium hover:bg-purple-200 transition-colors duration-200">
                     <i class="fas fa-file-export text-lg"></i>
                     <span>Export Schedule</span>
                 </a>

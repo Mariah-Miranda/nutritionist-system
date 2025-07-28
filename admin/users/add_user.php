@@ -14,7 +14,7 @@ $pageTitle = "Add New User";
 requireLogin();
 if (!hasRole('Admin')) {
     $_SESSION['error_message'] = "You do not have permission to add users.";
-    header("Location: " . BASE_URL . "../snsettings.php?tab=user-management");
+    header("Location: " . BASE_URL . "../settings.php?tab=user-management");
     exit();
 }
 
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($stmt->execute()) {
                     $_SESSION['success_message'] = "New user added successfully!";
-                    header("Location: " . BASE_URL . "settings.php?tab=user-management");
+                    header("Location: " . BASE_URL . "../settings.php?tab=user-management");
                     exit();
                 } else {
                     $message = '<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded" role="alert">Error adding user.</div>';

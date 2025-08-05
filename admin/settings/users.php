@@ -105,7 +105,7 @@ try {
            'Are you sure you want to delete user &quot;<?php echo htmlspecialchars(addslashes($user['full_name'])); ?>&quot;?', 
            function(confirmed) {
                if (confirmed) {
-                   window.location.href = '<?php echo BASE_URL; ?>admin/users/delete_user.php?id=<?php echo $user['user_id']; ?>';
+                   window.location.href = '<?php echo BASE_URL; ?>users/delete_user.php?id=<?php echo $user['user_id']; ?>';
                }
            }); return false;" 
        class="text-red-600 hover:text-red-900">Delete</a>

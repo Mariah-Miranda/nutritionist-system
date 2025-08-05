@@ -44,8 +44,8 @@ try {
                 <thead>
                     <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal rounded-t-lg">
                         <th class="py-3 px-6 text-left">Time</th>
-                        <th class="py-3 px-6 text-left">Patient Name</th>
-                        <th class="py-3 px-6 text-left">Patient ID</th>
+                        <th class="py-3 px-6 text-left">Client Name</th>
+                        <th class="py-3 px-6 text-left">Client ID</th>
                         <th class="py-3 px-6 text-left">Reason</th>
                         <th class="py-3 px-6 text-left">Status</th>
                         <th class="py-3 px-6 text-center">Actions</th>

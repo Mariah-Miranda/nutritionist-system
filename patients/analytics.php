@@ -42,12 +42,10 @@ try {
 
     $pageTitle = htmlspecialchars($patient['full_name']) . " - Health Analytics";
 
-    // Define the number of days back to fetch data for the graph
-    // Changed to 30 days to make the record time shorter
-    $days_back = 30; // Example: Fetch data for the last 30 days (approx. 1 month)
+    // Define the number of days back to fetch data
+    $days_back = 30; // Fetch data for the last 30 days (approx. 1 month)
 
     // Fetch all health metrics for the patient, ordered by date
-    // Added a WHERE clause to limit records to the last $days_back
     $stmt_all_metrics = $pdo->prepare("SELECT record_date, weight_kg, bmi, systolic_bp, diastolic_bp, blood_sugar_level_mg_dL, blood_sugar_fasting_status FROM patient_health_metrics WHERE patient_id = :patient_id AND record_date >= DATE_SUB(CURDATE(), INTERVAL :days_back DAY) ORDER BY record_date ASC");
     $stmt_all_metrics->bindParam(':patient_id', $patient_id, PDO::PARAM_INT);
     $stmt_all_metrics->bindParam(':days_back', $days_back, PDO::PARAM_INT);
@@ -99,9 +97,6 @@ try {
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<!-- Include Chart.js from CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-
 <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800"><?php echo htmlspecialchars($patient['full_name']); ?>'s Health Analytics</h2>
@@ -120,7 +115,7 @@ require_once __DIR__ . '/../includes/header.php';
     <?php if (empty($allHealthMetrics)): ?>
         <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md" role="alert">
             <p class="font-bold">No Health Metrics Recorded</p>
-            <p>There is no historical health data available for this patient yet. Please add metrics via the "Edit Patient" page.</p>
+            <p>There is no historical health data available for this client yet. Please add metrics via the "Edit client" page.</p>
         </div>
     <?php else: ?>
         <!-- Top Metric Cards -->
@@ -162,36 +157,58 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <!-- Placeholder for Goal Achievement -->
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex items-center space-x-4">
-                <div class="p-3 bg-purple-100 rounded-full text-purple-600">
-                    <i class="fas fa-bullseye text-2xl"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Goal Achievement</p>
-                    <p class="text-2xl font-bold text-purple-700">78%</p>
-                    <p class="text-xs text-gray-500 mt-1">↑ 1% from last month (Placeholder)</p>
-                </div>
-            </div>
+        
 
             <!-- Placeholder for Patient Satisfaction -->
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex items-center space-x-4">
-                <div class="p-3 bg-yellow-100 rounded-full text-yellow-600">
-                    <i class="fas fa-star text-2xl"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Patient Satisfaction</p>
-                    <p class="text-2xl font-bold text-yellow-700">4.6/5</p>
-                    <p class="text-xs text-gray-500 mt-1">↑ 0.2 from last month (Placeholder)</p>
-                </div>
-            </div>
+            
         </div>
 
-        <!-- Individual Patient Progress & Health Outcomes -->
+        <!-- Individual Patient Progress: BMI Chart (PHP/HTML/CSS based) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
-            <!-- Individual Patient Progress Chart (BMI) -->
             <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Individual Patient Progress - BMI</h3>
-                <canvas id="bmiChart" class="h-48"></canvas> <!-- Added h-48 for fixed small height -->
+                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Individual Client Progress - BMI (Last <?php echo $days_back; ?> Days)</h3>
+                <?php if (!empty($allHealthMetrics)):
+                    // Calculate Max BMI for scaling the graph
+                    $max_bmi_for_graph = 0;
+                    foreach ($allHealthMetrics as $metric) {
+                        if ((float)$metric['bmi'] > $max_bmi_for_graph) {
+                            $max_bmi_for_graph = (float)$metric['bmi'];
+                        }
+                    }
+                    // Add a small buffer to the max_bmi to ensure bars don't touch the top if max_bmi is the exact max
+                    $max_bmi_for_graph = $max_bmi_for_graph * 1.1; // 10% buffer
+
+                    $max_display_height_px = 150; // Max height for the tallest bar in pixels
+                    $bar_colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-red-500', 'bg-yellow-500', 'bg-indigo-500', 'bg-pink-500'];
+                    $color_index = 0;
+                ?>
+                    <div class="flex items-end justify-start h-48 border-b border-l border-gray-300 pb-2 overflow-x-auto pl-2" style="min-width: <?php echo count($allHealthMetrics) * 24; ?>px;">
+                        <?php
+                        foreach ($allHealthMetrics as $metric):
+                            $current_bmi = (float)$metric['bmi'];
+                            // Calculate bar height as a percentage of max_display_height_px
+                            $bar_height = ($current_bmi / $max_bmi_for_graph) * $max_display_height_px;
+                            // Ensure a minimum height for visibility if BMI is very low, e.g., 5px
+                            $bar_height = max(5, $bar_height);
+
+                            $current_bar_color = $bar_colors[$color_index % count($bar_colors)];
+                            $color_index++;
+                        ?>
+                            <div class="flex flex-col items-center relative group mr-1" style="width: 20px;">
+                                <div class="absolute -top-6 text-xs font-semibold text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                    <?php echo number_format($current_bmi, 2); ?>
+                                </div>
+                                <div class="w-full <?php echo $current_bar_color; ?> rounded-t-sm" style="height: <?php echo $bar_height; ?>px;"></div>
+                                <span class="text-xs text-gray-600 mt-1 whitespace-nowrap text-center transform rotate-90 origin-left translate-x-1/2">
+                                    <?php echo date('m/d', strtotime($metric['record_date'])); ?>
+                                </span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">This chart visually represents the Client's BMI over the last <?php echo $days_back; ?> days.</p>
+                <?php else: ?>
+                    <p class="text-gray-600">No BMI records available for the last <?php echo $days_back; ?> days to display a chart.</p>
+                <?php endif; ?>
             </div>
 
             <!-- Health Outcomes Progress Bars -->
@@ -237,105 +254,7 @@ require_once __DIR__ . '/../includes/header.php';
                 </div>
             </div>
         </div>
-
-        <!-- Additional Charts (Removed) -->
     <?php endif; ?>
 </div>
 
-<script>
-// Declare chart instances in a broader scope to allow destruction
-let bmiChartInstance = null;
-
-document.addEventListener('DOMContentLoaded', function() {
-    const healthMetricsData = <?php echo json_encode($allHealthMetrics); ?>;
-
-    // Destroy existing charts if they exist before processing new data
-    if (bmiChartInstance) bmiChartInstance.destroy();
-
-    if (healthMetricsData.length === 0) {
-        return; // No data to chart, and existing charts are destroyed
-    }
-
-    // Prepare data for charts
-    const labels = healthMetricsData.map(metric => new Date(metric.record_date).toLocaleDateString());
-    const bmis = healthMetricsData.map(metric => parseFloat(metric.bmi));
-
-    // --- BMI Chart (Main Progress Chart) ---
-    const bmiCtx = document.getElementById('bmiChart').getContext('2d');
-    bmiChartInstance = new Chart(bmiCtx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'BMI',
-                    data: bmis,
-                    borderColor: 'rgb(54, 162, 235)', // Blue color from image
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    tension: 0.3, // Smoother line
-                    fill: false,
-                    pointBackgroundColor: 'rgb(54, 162, 235)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(54, 162, 235)'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false, // Allow chart to fill container
-            animation: false, // Disable animations to make it static
-            plugins: {
-                title: {
-                    display: false // Title moved to H3
-                },
-                legend: {
-                    display: true,
-                    position: 'top',
-                    align: 'start'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toFixed(2);
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false, // Let Chart.js determine the optimal start based on data
-                    // No 'max' or 'min' set, allowing auto-scaling for better data visibility
-                    title: {
-                        display: true,
-                        text: 'BMI',
-                        color: '#555'
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Record Date',
-                        color: '#555'
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    }
-                }
-            }
-        }
-    });
-});
-</script>
-
-<?php include_once __DIR__ . '/../../includes/footer.php'; ?>
+<?php include_once __DIR__ . '/../includes/footer.php'; ?>

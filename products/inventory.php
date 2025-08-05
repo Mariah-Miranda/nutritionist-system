@@ -1,5 +1,6 @@
 <?php
 include('../includes/db_connect.php');
+include('../includes/header.php');
 
 // Handle stock update
 if (isset($_POST['update_stock'])) {

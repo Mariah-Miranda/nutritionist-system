@@ -33,6 +33,8 @@ $totalProducts = $stmt->fetchColumn();
     <div class="sales-index-page">
 
         <h1 class="sales-index-title">Sales Dashboard</h1>
+        
+
 
         <!-- Navigation buttons -->
           <div class="bg-white rounded-lg shadow-md p-4 mb-6 flex justify-between items-center">
@@ -61,7 +63,7 @@ $totalProducts = $stmt->fetchColumn();
                         <td>UGX <?= number_format((float)($todayStats['total_revenue'] ?? 0), 2) ?></td>
                     </tr>
                     <tr>
-                        <td>Total Customers</td>
+                        <td>Total Clients</td>
                         <td><?= (int)$totalCustomers ?></td>
                     </tr>
                     <tr>

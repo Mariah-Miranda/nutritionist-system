@@ -24,7 +24,7 @@ $taxRatePercent = TAX_RATE_PERCENT;
 
         <!-- Customer Type Selection -->
         <div class="mb-6 border border-gray-200 rounded-lg p-4">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Select Customer</h3>
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Select Client</h3>
             <div class="flex flex-wrap gap-4 mb-4">
                 <label class="inline-flex items-center cursor-pointer">
                     <input type="radio" name="customer_type" value="Patient" class="form-radio h-5 w-5 text-green-600" checked id="customerTypePatient">

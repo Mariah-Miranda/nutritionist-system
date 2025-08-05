@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->execute()) {
                 $_SESSION['success_message'] = "User updated successfully!";
-                header("Location: " . BASE_URL . "admin/settings.php?tab=user-management");
+                header("Location: " . BASE_URL . "../settings.php?tab=user-management");
                 exit();
             } else {
                 $message = '<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded" role="alert">Error updating user.</div>';
@@ -108,7 +108,7 @@ require_once __DIR__ . '/../../includes/header.php';
 
     <?php echo $message; ?>
 
-    <form action="<?php echo BASE_URL; ?>users/edit_user.php?id=<?php echo $user_id; ?>" method="POST" class="space-y-6">
+    <form action="<?php echo BASE_URL; ?>edit_user.php?id=<?php echo $user_id; ?>" method="POST" class="space-y-6">
         <div class="form-group">
             <label for="full_name" class="block text-gray-700 font-semibold mb-2">Full Name</label>
             <input type="text" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user['full_name'] ?? ''); ?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -148,7 +148,7 @@ require_once __DIR__ . '/../../includes/header.php';
         </div>
 
         <div class="flex justify-end space-x-4">
-            <a href="<?php echo BASE_URL; ?>admin/settings.php?tab=user-management" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors duration-200">Cancel</a>
+            <a href="<?php echo BASE_URL; ?>../settings.php?tab=user-management" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors duration-200">Cancel</a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-200">Update User</button>
         </div>
     </form>

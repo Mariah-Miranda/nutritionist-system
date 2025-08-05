@@ -21,7 +21,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
     // Validate that the ID is an integer
     if (!filter_var($patient_id, FILTER_VALIDATE_INT)) {
-        $_SESSION['error_message'] = "Invalid patient ID provided for deletion.";
+        $_SESSION['error_message'] = "Invalid client ID provided for deletion.";
         header('Location: ' . BASE_URL . 'patients/list.php');
         exit();
     }
@@ -45,17 +45,17 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         // Commit the transaction
         $pdo->commit();
 
-        $_SESSION['success_message'] = "Patient and associated data deleted successfully.";
+        $_SESSION['success_message'] = "client and associated data deleted successfully.";
 
     } catch (PDOException $e) {
         // Rollback the transaction if something went wrong
         $pdo->rollBack();
         error_log("ERROR: Could not delete patient (ID: $patient_id): " . $e->getMessage());
-        $_SESSION['error_message'] = "Error deleting patient. Details: " . $e->getMessage();
+        $_SESSION['error_message'] = "Error deleting client. Details: " . $e->getMessage();
     }
 
 } else {
-    $_SESSION['error_message'] = "No patient ID provided for deletion.";
+    $_SESSION['error_message'] = "No client ID provided for deletion.";
 }
 
 // Redirect back to the patient list page

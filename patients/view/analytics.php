@@ -179,7 +179,7 @@ require_once __DIR__ . '/../../includes/header.php';
                     <i class="fas fa-star text-2xl"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">Patient Satisfaction</p>
+                    <p class="text-sm text-gray-500">Client Satisfaction</p>
                     <p class="text-2xl font-bold text-yellow-700">4.6/5</p>
                     <p class="text-xs text-gray-500 mt-1">↑ 0.2 from last month (Placeholder)</p>
                 </div>
@@ -190,7 +190,7 @@ require_once __DIR__ . '/../../includes/header.php';
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
             <!-- Individual Patient Progress Chart (BMI) -->
             <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Individual Patient Progress - BMI</h3>
+                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Individual Client Progress - BMI</h3>
                 <canvas id="bmiChart" class="h-48"></canvas> <!-- Added h-48 for fixed small height -->
             </div>
 

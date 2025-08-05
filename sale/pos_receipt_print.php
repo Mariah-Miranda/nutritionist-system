@@ -14,7 +14,7 @@ $sale_items = [];
 if ($sale_id) {
     try {
         // Fetch sale details from 'sales' table
-        $stmt_sale = $pdo->prepare("SELECT s.*, p.full_name, p.patient_unique_id, p.membership_status
+        $stmt_sale = $pdo->prepare("SELECT s.*, p.full_name AS client_name, p.patient_unique_id AS client_unique_id, p.membership_status
                                     FROM sales s
                                     LEFT JOIN patients p ON s.clients_id = p.patient_id
                                     WHERE s.id = ?");
@@ -32,291 +32,127 @@ if ($sale_id) {
         }
 
     } catch (PDOException $e) {
-        // Log the error but do not display it on the receipt page
-        error_log("Error fetching POS receipt: " . $e->getMessage());
+        // Log the error for debugging
+        error_log("Database Error: " . $e->getMessage());
         $sale = null;
     }
 }
 
-// Set headers to prevent caching and ensure proper printing
-header("Cache-Control: no-cache, no-store, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
+// Redirect or show error if sale not found
+if (!$sale) {
+    die("Sale record not found.");
+}
 
-// --- Adapt variables from your provided receipt.php to match current data ---
-$orderno = htmlspecialchars($sale['id'] ?? 'N/A'); // Using sale ID as order number
-$remarks = 'Sale Transaction'; // Generic remark
-// Ensure cashier_name always has a value, even if session username is empty
-$cashier_name = !empty($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'N/A';
-$order_date = date('Y-m-d H:i:s', strtotime($sale['sale_date'] ?? 'now'));
-$date_completed = date('Y-m-d H:i:s', strtotime($sale['sale_date'] ?? 'now')); // Using sale_date as completion date
+// Extract data for display
+$sale_date = $sale['sale_date'];
+$date_completed = $sale_date; // Using sale_date as the completed date
+$client_name = htmlspecialchars($sale['client_name'] ?? $sale['customer_name'] ?? 'N/A');
+$client_id = htmlspecialchars($sale['client_unique_id'] ?? 'N/A');
+$subtotal_db = 0;
+foreach ($sale_items as $item) {
+    $subtotal_db += $item['subtotal'];
+}
+$tax_amount_db = $sale['total_amount'] - $subtotal_db;
+$total_amount_due_db = $sale['total_amount'];
 
-// Recalculate totals for accurate display based on your sales data
-$subtotal_before_item_discounts = array_reduce($sale_items, function($sum, $item) {
-    return $sum + ($item['price'] * $item['quantity']);
-}, 0);
-
-$total_item_discounts = array_reduce($sale_items, function($sum, $item) {
-    $item_gross_total = $item['price'] * $item['quantity'];
-    $item_discount = $item_gross_total - $item['subtotal'];
-    return $sum + $item_discount;
-}, 0);
-
-$subtotal_after_item_discounts = $subtotal_before_item_discounts - $total_item_discounts;
-
-$member_discount_percent = (float)($sale['discount_percent'] ?? 0);
-$member_discount_amount = $subtotal_after_item_discounts * ($member_discount_percent / 100);
-$tax_amount = ($subtotal_after_item_discounts - $member_discount_amount) * (TAX_RATE_PERCENT / 100);
-
-$total_amount_due_db = (float)($sale['total_amount'] ?? 0.00); // This should be the final total after all discounts and tax
-
-// Consistent payment details for all customer types
-$previous_paid_amount = 0.00; // Assuming no partial payments for a single POS transaction
-$tender_amount_this_transaction = $total_amount_due_db; // Assuming customer paid the exact total
-$total_paid_after_this_transaction = $total_amount_due_db; // Assuming total paid equals total due
-$balance_due_db = 0.00; // Assuming sale is fully paid
-$change_amount_this_transaction = 0.00; // Assuming exact change
-
-$payment_status_db = htmlspecialchars($sale['payment_method'] ?? 'N/A'); // Using payment method as status
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Smart Food Sale Receipt">
-<meta name="author" content="Smart Food">
-<title>Smart Food Sale Receipt</title>
- 
-<style type="text/css">
-    /* General print styles */
-    @page { size: auto;  margin: 1mm; } /* auto is the initial value; adjust margin as needed */
-    body {
-        font-family: Arial, sans-serif;
-        font-size: 10px; /* Base font size for receipt */
-        width: 100%;
-        padding: 0px;
-        margin: 0 auto; /* Center the body horizontally */
-        box-sizing: border-box;
-        background-color: #fff; /* Ensure white background for printing */
-    }
-    #wrapper {
-        width: 100%;
-        max-width: 280px; /* Typical width for thermal printer receipts */
-        margin: 0 auto;
-        padding: 5px;
-        box-sizing: border-box;
-        border: 1px solid #eee; /* Light border for screen view */
-        box-shadow: 0 0 5px rgba(0,0,0,0.1); /* Subtle shadow for screen view */
-    }
-    .company-header {
-        text-align: center;
-        margin-bottom: 10px;
-    }
-    .company-header h2 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: bold;
-        color: #333; /* Darker color for headings */
-    }
-    .company-header p {
-        margin: 0;
-        font-size: 9px;
-        color: #555; /* Slightly lighter text for info */
-    }
-    .company-header .slogan {
-        font-style: italic;
-        margin-top: 5px;
-        color: #666;
-    }
-    .receipt-info, .receipt-summary {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 5px;
-    }
-    .receipt-info td, .receipt-summary td, .receipt-summary th {
-        padding: 2px 0;
-        border: none; /* No borders for clean look */
-        color: #444;
-    }
-    .receipt-items {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 5px;
-        margin-bottom: 5px;
-    }
-    .receipt-items th, .receipt-items td {
-        padding: 3px 0;
-        border-bottom: 1px dashed #ccc; /* Dashed line for item separation */
-        text-align: left;
-        font-size: 9px;
-        color: #333;
-        word-break: break-all; /* Ensure long words break */
-    }
-    .receipt-items th:nth-child(2), .receipt-items td:nth-child(2) { text-align: right; } /* Price */
-    .receipt-items th:nth-child(3), .receipt-items td:nth-child(3) { text-align: center; } /* Qty */
-    .receipt-items th:nth-child(4), .receipt-items td:nth-child(4) { text-align: right; } /* Discount */
-    .receipt-items th:nth-child(5), .receipt-items td:nth-child(5) { text-align: right; } /* Sub-total */
-    
-    .text-right { text-align: right; }
-    .text-center { text-align: center; }
-    .footer-section {
-        margin-top: 10px;
-        text-align: center;
-        font-size: 9px;
-        color: #555;
-    }
-    /* Logo styling */
-    .company-logo {
-        max-width: 100px; /* Adjust as needed */
-        height: auto;
-        margin-bottom: 5px; /* Space between logo and text */
-        display: block; /* Ensure it's a block element for centering */
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    /* Print-specific adjustments */
-    @media print {
+    <title>Receipt #<?php echo htmlspecialchars($sale_id); ?></title>
+    <style>
         body {
-            margin: 0 !important;
-            padding: 0 !important;
-            box-shadow: none !important;
-            border: none !important;
-            background-color: #fff !important; /* Force white background for print */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            color: #000;
+            margin: 0;
+            padding: 0;
+            background: #fff;
         }
         #wrapper {
-            box-shadow: none !important;
-            border: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 10px;
+            border: 1px solid #000;
         }
-        /* Ensure all text is black for print */
-        body, #wrapper, .company-header h2, .company-header p, .company-header .slogan,
-        .receipt-info td, .receipt-summary td, .receipt-summary th,
-        .receipt-items th, .receipt-items td, .footer-section p {
-            color: #000 !important;
+        .header-section, .client-section, .footer-section {
+            text-align: center;
+            margin-bottom: 10px;
         }
-        /* Hide any elements that should not print */
-        .no-print {
-            display: none !important;
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
-    }
-</style>
-
+        th, td {
+            padding: 5px 0;
+        }
+        .item-row td {
+            border-bottom: 1px dashed #ddd;
+        }
+        .logo {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        @media print {
+            body {
+                background: none;
+            }
+            #wrapper {
+                border: none;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body onload="window.print();">
- <center>
-<div id="wrapper">
-    <div class="container">
-        <!-- Company Header -->
-        <div class="company-header">
-            <!-- Company Logo -->
-            <img src="https://placehold.co/100x50/10B981/ffffff?text=Smart+Food" alt="Smart Food Logo" class="company-logo" onerror="this.onerror=null;this.src='https://placehold.co/100x50/10B981/ffffff?text=Smart+Food';">
-            <h2>SMART FOOD</h2>
-            <p>Kampala, Uganda</p>
-            <p>Phone: +123 456 7890</p>
-            <p>Email: info@smartfood.com</p>
-            <p class="slogan">"Healthy Food, Healthy Life!"</p>
+<body>
+    <div id="wrapper">
+        <div class="header-section">
+            <h1 class="logo">Nutrition Shop</h1>
+            <p>123 Nutrition St, Kampala</p>
+            <p>Tel: +256 771 234567</p>
+            <p>Email: info@nutrition.com</p>
+            <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+        </div>
+        
+        <div class="client-section">
+            <p><strong>Receipt ID:</strong> #<?php echo htmlspecialchars($sale_id); ?></p>
+            <p><strong>Client Name:</strong> <?php echo $client_name; ?></p>
+            <p><strong>Client ID:</strong> <?php echo $client_id; ?></p>
             <hr style="border-top: 1px dashed #000; margin: 10px 0;">
         </div>
 
-        <div style="text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 5px;">SALE RECEIPT</div>
-        <div style="text-align: center; font-size: 10px; margin-bottom: 10px;"><?php echo $remarks; ?></div>
-        
-
-        <table class="receipt-info">
-            <tr>
-                <td>Receipt #:</td>
-                <td class="text-right"><strong><?php echo htmlspecialchars($orderno); ?></strong></td>
-            </tr>
-            <tr>
-                <td>Sale Date:</td>
-                <td class="text-right"><?php echo date('d/m/Y H:i:s', strtotime($order_date)); ?></td>
-            </tr>
-            <?php if ($sale['customer_type'] === 'Patient' && !empty($sale['full_name'])): ?>
-            <tr>
-                <td>Customer:</td>
-                <td class="text-right"><?php echo htmlspecialchars($sale['full_name']); ?> (Patient)</td>
-            </tr>
-            <?php elseif (!empty($sale['customer_name'])): ?>
-            <tr>
-                <td>Customer:</td>
-                <td class="text-right"><?php echo htmlspecialchars($sale['customer_name']); ?></td>
-            </tr>
-            <?php endif; ?>
-            <?php if (!empty($sale['customer_phone'])): ?>
-            <tr>
-                <td>Phone:</td>
-                <td class="text-right"><?php echo htmlspecialchars($sale['customer_phone']); ?></td>
-            </tr>
-            <?php endif; ?>
-            <tr>
-                <td>Cashier:</td>
-                <td class="text-right"><?php echo $cashier_name; ?></td>
-            </tr>
-            <tr>
-                <td>Print Date:</td>
-                <td class="text-right"><?php echo date('d/m/Y H:i:s'); ?></td>
-            </tr>
-            <tr>
-                <td colspan="2"><hr style="border-top: 1px dashed #000; margin: 5px 0;"></td>
-            </tr>
-        </table>
-       
-        <table class="receipt-items">
+        <table>
             <thead>
-                <tr> 
-                    <th>Item</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Discount</th>
-                    <th>Amount</th> 
-                </tr> 
+                <tr>
+                    <th class="text-left">Item</th>
+                    <th class="text-right">Qty</th>
+                    <th class="text-right">Price</th>
+                </tr>
             </thead>
             <tbody>
-                <?php 
-                if (!empty($sale_items)) {
-                    foreach ($sale_items as $item) { 
-                        // Calculate item discount for display
-                        $item_gross_price = $item['price'] * $item['quantity'];
-                        $item_discount_display = $item_gross_price - $item['subtotal'];
-
-                        echo '<tr>'; 
-                        echo '<td>'.htmlspecialchars($item['product_name']).'</td>';
-                        echo '<td class="text-right">'.number_format($item['price'], 2).'</td>';
-                        echo '<td class="text-center">'.number_format($item['quantity'], 0).'</td>';
-                        echo '<td class="text-right">'.number_format($item_discount_display, 2).'</td>'; // Display item discount
-                        echo '<td class="text-right">'.number_format($item['subtotal'], 2).'</td>'; 
-                        echo '</tr>';
-                    } 
-                } else {
-                    echo '<tr><td colspan="5" class="text-center">No items in this sale.</td></tr>'; // Adjusted colspan
-                }
-                ?>  
+                <?php foreach ($sale_items as $item): ?>
+                <tr class="item-row">
+                    <td class="text-left"><?php echo htmlspecialchars($item['product_name']); ?></td>
+                    <td class="text-right"><?php echo htmlspecialchars($item['quantity']); ?></td>
+                    <td class="text-right"><?php echo number_format($item['unit_price'], 2); ?></td>
+                </tr>
+                <?php endforeach; ?>
             </tbody>
-        </table>  
+        </table>
         
-        <table class="receipt-summary">
-            <tr> 
+        <table style="margin-top: 10px;">
+            <tr>
                 <td class="text-right">Subtotal:</td>
-                <td class="text-right"><?php echo number_format($subtotal_before_item_discounts, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
+                <td class="text-right"><?php echo number_format($subtotal_db, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
             </tr>
-            <?php if ($total_item_discounts > 0): ?>
-            <tr> 
-                <td class="text-right">Item Discounts:</td>
-                <td class="text-right">- <?php echo number_format($total_item_discounts, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
-            </tr>
-            <?php endif; ?>
-            <?php if ($member_discount_amount > 0): // Using calculated member discount amount ?>
-            <tr> 
-                <td class="text-right">Member Discount (<?php echo htmlspecialchars($member_discount_percent); ?>%):</td>
-                <td class="text-right">- <?php echo number_format($member_discount_amount, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
-            </tr>
-            <?php endif; ?>
             <tr>
                 <td class="text-right">Tax (<?php echo TAX_RATE_PERCENT; ?>%):</td>
-                <td class="text-right">+ <?php echo number_format($tax_amount, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
+                <td class="text-right"><?php echo number_format($tax_amount_db, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
             </tr>
             <tr>
                 <td colspan="2"><hr style="border-top: 1px dashed #000; margin: 5px 0;"></td>
@@ -349,16 +185,20 @@ $payment_status_db = htmlspecialchars($sale['payment_method'] ?? 'N/A'); // Usin
         var mediaQueryList = window.matchMedia('print');
         mediaQueryList.addListener(function(mql) {
             if (!mql.matches) {
-                // If not matching print media, assume print dialog was closed
+                // Not a print event, do nothing
                 afterPrint();
             }
         });
     }
 
-    // Fallback for older browsers or if mediaQueryList is not triggered
-    window.onafterprint = afterPrint;
-}());
+    // Call print function automatically when the page loads
+    window.print();
+    
+    // Note: The print dialog can block the main thread, so window.close() might not fire reliably.
+    // An alternative is to use window.onafterprint, but browser support varies.
+    // For this reason, a simple console log is often used to confirm the event.
+    // window.onafterprint = afterPrint;
+    })();
 </script>
- </center>
 </body>
 </html>

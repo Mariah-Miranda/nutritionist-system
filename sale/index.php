@@ -13,9 +13,9 @@ $stmt = $pdo->prepare("
 $stmt->execute([$today]);
 $todayStats = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Get total customers (now considering patients as primary clients)
+// Get total clients (now considering patients as primary clients)
 $stmt = $pdo->query("SELECT COUNT(*) as total FROM patients");
-$totalCustomers = $stmt->fetchColumn();
+$totalClients = $stmt->fetchColumn();
 
 // Get product count
 $stmt = $pdo->query("SELECT COUNT(*) as total FROM products");
@@ -61,8 +61,8 @@ $totalProducts = $stmt->fetchColumn();
                         <td>UGX <?= number_format((float)($todayStats['total_revenue'] ?? 0), 2) ?></td>
                     </tr>
                     <tr>
-                        <td>Total Customers</td>
-                        <td><?= (int)$totalCustomers ?></td>
+                        <td>Total Clients</td>
+                        <td><?= (int)$totalClients ?></td>
                     </tr>
                     <tr>
                         <td>Products Available</td>

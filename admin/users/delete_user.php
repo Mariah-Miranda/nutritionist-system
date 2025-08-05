@@ -42,6 +42,6 @@ if ($user_id) {
 }
 
 // Redirect back to the user management tab
-header("Location: " . BASE_URL . "admin/settings.php?tab=user-management");
+header("Location: " . BASE_URL . "../settings.php?tab=user-management");
 exit();
 ?>

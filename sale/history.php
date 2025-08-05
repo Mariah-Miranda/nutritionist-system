@@ -6,8 +6,9 @@ $pageTitle = 'Sales History'; // Set page title
 
 // Run query using PDO
 // Updated to select customer_type and customer_name for display
+// The join is still on the patients table since that is where the client info is stored
 $stmt = $pdo->query("
-    SELECT s.id, s.customer_type, s.customer_name, p.full_name AS patient_name, s.total_amount, s.sale_date
+    SELECT s.id, s.customer_type, p.full_name AS client_name, s.total_amount, s.sale_date
     FROM sales s
     LEFT JOIN patients p ON s.clients_id = p.patient_id
     ORDER BY s.sale_date DESC
@@ -24,25 +25,19 @@ $stmt = $pdo->query("
                     <tr>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Sale ID</th>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Customer Type</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Customer Name</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Total</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Client Name</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Total Amount</th>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Date</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Receipt</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
                     <tr class="hover:bg-gray-50">
                         <td class="py-3 px-4 text-gray-800"><?= htmlspecialchars($row['id']) ?></td>
-                        <td class="py-3 px-4 text-gray-800"><?= htmlspecialchars($row['customer_type']) ?></td>
+                        <td class="py-3 px-4 text-gray-800">Client</td>
                         <td class="py-3 px-4 text-gray-800">
-                            <?php
-                                if ($row['customer_type'] === 'Patient') {
-                                    echo htmlspecialchars($row['patient_name'] ?? 'N/A');
-                                } else {
-                                    echo htmlspecialchars($row['customer_name'] ?? 'N/A');
-                                }
-                            ?>
+                            <?= htmlspecialchars($row['client_name'] ?? 'N/A') ?>
                         </td>
                         <td class="py-3 px-4 text-gray-800"><?= DEFAULT_CURRENCY . ' ' . number_format($row['total_amount'], 2) ?></td>
                         <td class="py-3 px-4 text-gray-800"><?= htmlspecialchars($row['sale_date']) ?></td>

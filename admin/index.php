@@ -87,7 +87,7 @@ require_once __DIR__ . '/../includes/header.php';
         <!-- Dashboard Card: Total Patients -->
         <div class="bg-blue-100 text-blue-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-semibold">Total Patients</h3>
+                <h3 class="text-xl font-semibold">Total clientsS</h3>
                 <i class="fas fa-users text-3xl text-blue-700 opacity-85"></i>
             </div>
             <p class="text-4xl font-bold"><?php echo htmlspecialchars($totalPatients); ?></p>

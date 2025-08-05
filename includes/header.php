@@ -52,7 +52,7 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                     <li>
                         <a href="<?php echo BASE_URL; ?>../patients/list.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
                             <i class="fas fa-users text-xl"></i>
-                            <span class="text-lg">Patients</span>
+                            <span class="text-lg">Clients</span>
                         </a>
                     </li>
                     <li>

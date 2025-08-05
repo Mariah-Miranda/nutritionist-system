@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php'; // For sanitizeInput and calculateAgeFromDob
 
 // Set the page title for the header
-$pageTitle = "Edit Patient";
+$pageTitle = "Edit client";
 
 // Require login for this page (e.g., Nutritionist or Admin)
 requireLogin();
@@ -24,7 +24,7 @@ $message = '';
 $patient_id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
 
 if (!$patient_id) {
-    $message = "Invalid patient ID provided for editing.";
+    $message = "Invalid client ID provided for editing.";
     header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
     exit();
 }
@@ -37,7 +37,7 @@ try {
     $patient = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$patient) {
-        $message = "Patient not found for editing.";
+        $message = "Client not found for editing.";
         header('Location: ' . BASE_URL . 'list.php?message=' . urlencode($message));
         exit();
     }
@@ -65,7 +65,7 @@ require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-green-600 pb-2">Edit Patient: <?php echo htmlspecialchars($patient['full_name']); ?></h2>
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-green-600 pb-2">Edit Client: <?php echo htmlspecialchars($patient['full_name']); ?></h2>
 
     <?php if ($message): ?>
         <div class="bg-<?php echo strpos($message, 'successful') !== false ? 'green' : 'red'; ?>-100 border-l-4 border-<?php echo strpos($message, 'successful') !== false ? 'green' : 'red'; ?>-500 text-<?php echo strpos($message, 'successful') !== false ? 'green' : 'red'; ?>-700 p-4 mb-6 rounded" role="alert">
@@ -86,7 +86,7 @@ require_once __DIR__ . '/../includes/header.php';
 
             <!-- Patient ID (display only) -->
             <div>
-                <label for="patient_unique_id" class="block text-gray-700 font-semibold mb-2">Patient ID</label>
+                <label for="patient_unique_id" class="block text-gray-700 font-semibold mb-2">Client ID</label>
                 <input type="text" id="patient_unique_id" name="patient_unique_id" value="<?php echo htmlspecialchars($patient['patient_unique_id'] ?? ''); ?>" disabled class="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
             </div>
 
@@ -191,7 +191,7 @@ require_once __DIR__ . '/../includes/header.php';
 
         <div class="flex justify-end space-x-4 mt-6">
             <a href="<?php echo BASE_URL; ?>view.php?id=<?php echo $patient['patient_id']; ?>" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">Cancel</a>
-            <button type="submit" class="px-6 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors">Update Patient</button>
+            <button type="submit" class="px-6 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors">Update Client</button>
         </div>
     </form>
 </div>

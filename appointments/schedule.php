@@ -81,9 +81,9 @@ include_once __DIR__ . '/../includes/header.php';
 
         <!-- Patient Selection -->
         <div class="mb-4">
-            <label for="patient_id" class="block text-gray-700 font-semibold mb-2">Patient</label>
+            <label for="patient_id" class="block text-gray-700 font-semibold mb-2">Client</label>
             <select id="patient_id" name="patient_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                <option value="">Select a Patient</option>
+                <option value="">Select a Client</option>
                 <?php foreach ($patients as $p): ?>
                     <option value="<?php echo $p['patient_id']; ?>" <?php echo ($p['patient_id'] == $patient_id) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($p['full_name']); ?>

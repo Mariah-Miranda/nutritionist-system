@@ -148,7 +148,7 @@ require_once __DIR__ . '/../../includes/header.php';
         </div>
 
         <div class="flex justify-end space-x-4">
-            <a href="<?php echo BASE_URL; ?>admin/settings.php?tab=user-management" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors duration-200">Cancel</a>
+            <a href="<?php echo BASE_URL; ?>../settings.php?tab=user-management" class="px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors duration-200">Cancel</a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-200">Update User</button>
         </div>
     </form>

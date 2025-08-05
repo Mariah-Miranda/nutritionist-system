@@ -25,7 +25,14 @@ $topStmt = $pdo->query("
 
 <div class="container mx-auto p-4 md:p-8">
     <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Sales Summary</h2>
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800 m-0">Sales Summary</h2>
+            <a href="export_summary_pdf.php" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
+                <i class="fas fa-download"></i>
+                <span>Download </span>
+            </a>
+        </div>
+        <!-- rest of your content -->
 
         <h3 class="text-xl font-medium text-gray-700 mb-4">Daily Sales</h3>
         <div class="overflow-x-auto mb-8">

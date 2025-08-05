@@ -87,13 +87,13 @@ require_once __DIR__ . '/../includes/header.php';
         <!-- Dashboard Card: Total Patients -->
         <div class="bg-blue-100 text-blue-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-semibold">Total clientsS</h3>
+                <h3 class="text-xl font-semibold">Total Patients</h3>
                 <i class="fas fa-users text-3xl text-blue-700 opacity-85"></i>
             </div>
             <p class="text-4xl font-bold"><?php echo htmlspecialchars($totalPatients); ?></p>
-            <p class="text-sm opacity-90 mt-2 text-blue-700">All registered patients in the system.</p>
+            <p class="text-sm opacity-90 mt-2 text-blue-700">All registered Clients in the system.</p>
             <a href="<?php echo BASE_URL; ?>../patients/list.php" class="text-blue-600 hover:text-blue-800 text-sm mt-4 block underline">
-                Go to Patients <i class="fas fa-arrow-right text-xs ml-1"></i>
+                Go to Clients <i class="fas fa-arrow-right text-xs ml-1"></i>
             </a>
         </div>
 
@@ -169,7 +169,7 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <a href="<?php echo BASE_URL; ?>../patients/add.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
                 <i class="fas fa-user-plus text-xl text-green-600"></i>
-                <span class="font-medium">Add New Patient</span>
+                <span class="font-medium">Add New Clients</span>
             </a>
             <a href="<?php echo BASE_URL; ?>../appointments/.php" class="flex items-center justify-center space-x-2 p-4 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 transition-colors duration-200">
                 <i class="fas fa-calendar-plus text-xl text-green-600"></i>

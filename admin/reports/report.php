@@ -50,24 +50,24 @@ include_once __DIR__ . '/../../includes/header.php';
     <!-- Patient Report Section -->
     <div class="mb-10">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-semibold text-gray-800">Patient Report</h3>
+            <h3 class="text-xl font-semibold text-gray-800">Client Report</h3>
             <a href="<?php echo BASE_URL; ?>export_patients.php" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
                 <i class="fas fa-download"></i>
-                <span>Download Patient Report</span>
+                <span>Download client Report</span>
             </a>
         </div>
 
         <?php if (empty($patients)): ?>
             <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md" role="alert">
-                <p class="font-bold">No Patients Found</p>
-                <p>There are no patient records to display in this report.</p>
+                <p class="font-bold">No Clients Found</p>
+                <p>There are no clients records to display in this report.</p>
             </div>
         <?php else: ?>
             <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient ID</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client ID</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>

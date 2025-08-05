@@ -80,13 +80,20 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800"><?php echo htmlspecialchars($patient['full_name']); ?>'s Profile</h2>
         <div class="flex space-x-3">
-            <a href="<?php echo BASE_URL; ?>edit.php?id=<?php echo $patient['patient_id']; ?>" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
+            <a href="<?php echo BASE_URL; ?>edit.php?id=<?php echo $patient['patient_id']; ?>" 
+               class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
                 <i class="fas fa-edit"></i>
-                <span>Edit Patient</span>
+                <span>Edit Client</span>
             </a>
-            <a href="<?php echo BASE_URL; ?>add.php" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md">
+            <a href="<?php echo BASE_URL; ?>add.php" 
+               class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md">
                 <i class="fas fa-plus"></i>
-                <span>Add New Patient</span>
+                <span>Add New Client</span>
+            </a>
+            <a href="<?php echo BASE_URL; ?>export_single_patient_pdf.php?id=<?php echo $patient['patient_id']; ?>" 
+               class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-200 shadow-md">
+                <i class="fas fa-download"></i>
+                <span>Download PDF</span>
             </a>
         </div>
     </div>
@@ -114,7 +121,7 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
             <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Personal Information</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-gray-700">
-                <div><strong>Patient ID:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['patient_unique_id']); ?></span></div>
+                <div><strong>Client ID:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['patient_unique_id']); ?></span></div>
                 <div><strong>Date of Birth:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['date_of_birth'] ?? 'N/A'); ?></span></div>
                 <div><strong>Age:</strong> <span class="text-gray-900"><?php echo htmlspecialchars(calculateAgeFromDob($patient['date_of_birth']) ?? 'N/A'); ?></span></div>
                 <div><strong>Gender:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($patient['gender'] ?? 'N/A'); ?></span></div>
@@ -199,16 +206,16 @@ require_once __DIR__ . '/../includes/header.php';
                     <p><strong>Fasting Status:</strong> <span class="text-gray-900"><?php echo htmlspecialchars($latestMetrics['blood_sugar_fasting_status'] ?? 'N/A'); ?></span></p>
                 </div>
             <?php else: ?>
-                <p class="text-gray-600">No health metrics recorded for this patient yet.</p>
+                <p class="text-gray-600">No health metrics recorded for this Client yet.</p>
             <?php endif; ?>
         </div>
     </div>
 
     <!-- Patient Analytics Section -->
     <div class="mt-8 bg-white p-6 rounded-lg shadow-md border border-gray-200">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Patient Progress & Analytics</h3>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Client Progress & Analytics</h3>
         <p class="text-gray-600">
-            This section will display charts and detailed analytics for the patient's health progress over time.
+            This section will display charts and detailed analytics for the client's health progress over time.
             <a href="<?php echo BASE_URL; ?>analytics.php?id=<?php echo $patient['patient_id']; ?>" class="text-blue-600 hover:underline">View detailed analytics</a>.
         </p>
         <!-- Data for JS charts will be passed here or fetched via AJAX -->
@@ -224,7 +231,7 @@ require_once __DIR__ . '/../includes/header.php';
     <!-- Back to List Button -->
     <div class="mt-8 text-center">
         <a href="<?php echo BASE_URL; ?>list.php" class="inline-flex items-center space-x-2 px-6 py-2 rounded-lg bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition-colors">
-            <i class="fas fa-arrow-left"></i> Back to Patient List
+            <i class="fas fa-arrow-left"></i> Back to Client List
         </a>
     </div>
 

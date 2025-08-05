@@ -22,15 +22,37 @@ $taxRatePercent = TAX_RATE_PERCENT;
     <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-12">
         <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-4">New Sale</h2>
 
-        <!-- Patient Selection Section -->
-        <div class="mb-8 p-6 bg-gray-50 rounded-xl shadow-inner">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Select Patient</h3>
-            
-            <div id="patientSearchSection" class="relative">
-                <label for="patientSearchInput" class="block text-sm font-medium text-gray-700 mb-2">Search by Name or ID</label>
-                <input type="text" id="patientSearchInput" placeholder="e.g., John Doe or P-12345" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
-                <div id="patientSearchResults" class="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto shadow-lg hidden">
-                    <!-- Search results will be injected here -->
+        <!-- Customer Type Selection -->
+        <div class="mb-6 border border-gray-200 rounded-lg p-4">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Select Customer</h3>
+            <div class="flex flex-wrap gap-4 mb-4">
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="radio" name="customer_type" value="Patient" class="form-radio h-5 w-5 text-green-600" checked id="customerTypePatient">
+                    <span class="ml-2 text-gray-700 font-medium">
+                        <i class="fas fa-user-injured mr-1 text-green-600"></i> Existing Patient
+                    </span>
+                </label>
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="radio" name="customer_type" value="Client" class="form-radio h-5 w-5 text-blue-600" id="customerTypeClient">
+                    <span class="ml-2 text-gray-700 font-medium">
+                        <i class="fas fa-user-tie mr-1 text-blue-600"></i> New Client
+                    </span>
+                </label>
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="radio" name="customer_type" value="Visitor" class="form-radio h-5 w-5 text-purple-600" id="customerTypeVisitor">
+                    <span class="ml-2 text-gray-700 font-medium">
+                        <i class="fas fa-user mr-1 text-purple-600"></i> Visitor
+                    </span>
+                </label>
+            </div>
+
+            <!-- Patient Selection -->
+            <div id="patientSelectionArea" class="customer-type-area">
+                <div class="relative flex-1 mb-4">
+                    <input type="text" id="patientSearchInput" placeholder="Search patient by name or ID..."
+                           class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out"
+                           autocomplete="off">
+                    <div id="patientSearchResults" class="absolute z-20 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 hidden"></div>
                 </div>
                 <input type="hidden" id="selectedPatientId">
                 <div id="selectedPatientDisplay" class="mt-4 p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm hidden transition-all duration-300 ease-in-out">

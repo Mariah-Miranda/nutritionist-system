@@ -22,37 +22,15 @@ $taxRatePercent = TAX_RATE_PERCENT;
     <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-12">
         <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-4">New Sale</h2>
 
-        <!-- Customer Type Selection -->
-        <div class="mb-6 border border-gray-200 rounded-lg p-4">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Select Customer</h3>
-            <div class="flex flex-wrap gap-4 mb-4">
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="radio" name="customer_type" value="Patient" class="form-radio h-5 w-5 text-green-600" checked id="customerTypePatient">
-                    <span class="ml-2 text-gray-700 font-medium">
-                        <i class="fas fa-user-injured mr-1 text-green-600"></i> Existing Patient
-                    </span>
-                </label>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="radio" name="customer_type" value="Client" class="form-radio h-5 w-5 text-blue-600" id="customerTypeClient">
-                    <span class="ml-2 text-gray-700 font-medium">
-                        <i class="fas fa-user-tie mr-1 text-blue-600"></i> New Client
-                    </span>
-                </label>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="radio" name="customer_type" value="Visitor" class="form-radio h-5 w-5 text-purple-600" id="customerTypeVisitor">
-                    <span class="ml-2 text-gray-700 font-medium">
-                        <i class="fas fa-user mr-1 text-purple-600"></i> Visitor
-                    </span>
-                </label>
-            </div>
-
-            <!-- Patient Selection -->
-            <div id="patientSelectionArea" class="customer-type-area">
-                <div class="relative flex-1 mb-4">
-                    <input type="text" id="patientSearchInput" placeholder="Search patient by name or ID..."
-                           class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out"
-                           autocomplete="off">
-                    <div id="patientSearchResults" class="absolute z-20 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 hidden"></div>
+        <!-- Patient Selection Section -->
+        <div class="mb-8 p-6 bg-gray-50 rounded-xl shadow-inner">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Select Patient</h3>
+            
+            <div id="patientSearchSection" class="relative">
+                <label for="patientSearchInput" class="block text-sm font-medium text-gray-700 mb-2">Search by Name or ID</label>
+                <input type="text" id="patientSearchInput" placeholder="e.g., John Doe or P-12345" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                <div id="patientSearchResults" class="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto shadow-lg hidden">
+                    <!-- Search results will be injected here -->
                 </div>
                 <input type="hidden" id="selectedPatientId">
                 <div id="selectedPatientDisplay" class="mt-4 p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-sm hidden transition-all duration-300 ease-in-out">
@@ -154,7 +132,7 @@ $taxRatePercent = TAX_RATE_PERCENT;
     const selectedPatientDisplay = document.getElementById('selectedPatientDisplay');
     const displayPatientName = document.getElementById('displayPatientName');
     const displayPatientId = document.getElementById('displayPatientId');
-    const selectedPatientId = document.getElementById('selectedPatientId');
+    const selectedPatientIdInput = document.getElementById('selectedPatientId'); // Renamed to avoid conflict
 
     const productSearchInput = document.getElementById('productSearchInput');
     const productSearchResults = document.getElementById('productSearchResults');
@@ -178,6 +156,11 @@ $taxRatePercent = TAX_RATE_PERCENT;
     let timeoutId;
 
     // --- UTILITY FUNCTIONS ---
+    /**
+     * Displays a custom message box to the user.
+     * @param {string} title - The title of the message box.
+     * @param {string} message - The content message to display.
+     */
     function showMessage(title, message) {
         if (messageBox && messageBoxTitle && messageBoxContent) {
             messageBoxTitle.textContent = title;
@@ -188,6 +171,10 @@ $taxRatePercent = TAX_RATE_PERCENT;
         }
     }
 
+    /**
+     * Calculates the subtotal, tax, and total for the current sale items.
+     * @returns {{subtotal: number, tax: number, total: number}} An object containing the calculated totals.
+     */
     function calculateTotals() {
         let subtotal = 0;
         saleItems.forEach(item => {
@@ -204,6 +191,10 @@ $taxRatePercent = TAX_RATE_PERCENT;
         };
     }
 
+    /**
+     * Updates the displayed subtotal, tax, and total amounts on the UI.
+     * Also toggles the empty cart message visibility.
+     */
     function updateTotals() {
         const totals = calculateTotals();
         subtotalAmount.textContent = totals.subtotal.toFixed(2);
@@ -217,8 +208,12 @@ $taxRatePercent = TAX_RATE_PERCENT;
         }
     }
 
+    /**
+     * Renders the list of sale items in the cart section.
+     * Creates and appends HTML elements for each item, including quantity controls and remove buttons.
+     */
     function renderSaleItems() {
-        saleItemsList.innerHTML = '';
+        saleItemsList.innerHTML = ''; // Clear existing items
         saleItems.forEach((item, index) => {
             const itemElement = document.createElement('div');
             itemElement.className = 'flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border border-gray-200';
@@ -251,6 +246,10 @@ $taxRatePercent = TAX_RATE_PERCENT;
     }
 
     // --- EVENT HANDLERS ---
+    /**
+     * Handles patient search input. Debounces the input to reduce API calls.
+     * Fetches patient data from 'search_patients.php' and renders results.
+     */
     function searchPatients() {
         const searchTerm = patientSearchInput.value.trim();
         if (searchTerm.length < 2) {
@@ -274,12 +273,16 @@ $taxRatePercent = TAX_RATE_PERCENT;
                 renderPatientResults(patients);
             } catch (error) {
                 console.error('Failed to fetch patients:', error);
-                showMessage('Error', 'Failed to search for clients. Please check the console for more details and try again.');
+                showMessage('Error', 'Failed to search for patients. Please check the console for more details and try again.');
                 patientSearchResults.classList.add('hidden');
             }
         }, 300);
     }
 
+    /**
+     * Renders the patient search results in the dropdown.
+     * @param {Array<Object>} patients - An array of patient objects.
+     */
     function renderPatientResults(patients) {
         patientSearchResults.innerHTML = '';
         if (patients.length > 0) {
@@ -300,15 +303,23 @@ $taxRatePercent = TAX_RATE_PERCENT;
         }
     }
 
+    /**
+     * Selects a patient from the search results and updates the UI.
+     * @param {Object} patient - The selected patient object.
+     */
     function selectPatient(patient) {
         selectedPatient = patient;
-        selectedPatientId.value = patient.patient_id;
+        selectedPatientIdInput.value = patient.patient_id; // Use the renamed input
         displayPatientName.textContent = patient.full_name;
         displayPatientId.textContent = patient.patient_unique_id;
         selectedPatientDisplay.classList.remove('hidden');
         patientSearchResults.classList.add('hidden');
     }
 
+    /**
+     * Handles product search input. Debounces the input to reduce API calls.
+     * Fetches product data from 'search_products.php' and renders results.
+     */
     function searchProducts() {
         const searchTerm = productSearchInput.value.trim();
         if (searchTerm.length < 2) {
@@ -338,13 +349,17 @@ $taxRatePercent = TAX_RATE_PERCENT;
         }, 300);
     }
 
+    /**
+     * Renders the product search results in the dropdown.
+     * @param {Array<Object>} products - An array of product objects.
+     */
     function renderProductResults(products) {
         productSearchResults.innerHTML = '';
         if (products.length > 0) {
             products.forEach(product => {
                 const resultItem = document.createElement('div');
                 resultItem.className = 'p-3 hover:bg-blue-100 cursor-pointer border-b border-gray-200 last:border-b-0';
-                resultItem.textContent = `${product.product_name} (${DEFAULT_CURRENCY} ${product.price}) - Stock: ${product.stock}`;
+                resultItem.textContent = `${product.product_name} (${DEFAULT_CURRENCY} ${parseFloat(product.price).toFixed(2)}) - Stock: ${product.stock}`;
                 resultItem.dataset.id = product.id;
                 resultItem.dataset.name = product.product_name;
                 resultItem.dataset.price = product.price;
@@ -362,6 +377,10 @@ $taxRatePercent = TAX_RATE_PERCENT;
         }
     }
 
+    /**
+     * Adds the currently selected product to the sale items list (cart).
+     * Handles quantity increment if the product is already in the cart, and checks stock.
+     */
     function addProductToSale() {
         if (!selectedProduct) {
             showMessage('Missing Product', 'Please select a product from the search results first.');
@@ -396,16 +415,29 @@ $taxRatePercent = TAX_RATE_PERCENT;
         updateTotals();
     }
 
+    /**
+     * Handles quantity changes (increment/decrement) and removal of items in the cart.
+     * Fetches latest stock information before incrementing quantity.
+     * @param {Event} event - The click event from the quantity or remove button.
+     */
     function handleQuantityChange(event) {
-        const index = event.target.closest('button').dataset.index;
-        const action = event.target.closest('button').dataset.action;
+        const button = event.target.closest('button');
+        if (!button) return; // Ensure a button was clicked
+
+        const index = button.dataset.index;
+        const action = button.dataset.action;
         const item = saleItems[index];
 
         if (!item) return;
 
-        // Fetch the latest stock for the item
+        // Fetch the latest stock for the item to ensure accurate stock check
         fetch(`search_products.php?search_term=${encodeURIComponent(item.product_name)}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok for product stock check.');
+                }
+                return response.json();
+            })
             .then(products => {
                 if (products.length > 0) {
                     const latestStock = products[0].stock;
@@ -415,11 +447,13 @@ $taxRatePercent = TAX_RATE_PERCENT;
                         } else {
                             showMessage('Insufficient Stock', `Cannot add more. Only ${latestStock} in stock.`);
                         }
-                    } else if (action === 'decrement' && item.quantity > 1) {
-                        item.quantity--;
-                    } else if (action === 'decrement' && item.quantity === 1) {
-                        // If quantity is 1 and user decrements, remove the item
-                        saleItems.splice(index, 1);
+                    } else if (action === 'decrement') {
+                        if (item.quantity > 1) {
+                            item.quantity--;
+                        } else {
+                            // If quantity is 1 and user decrements, remove the item
+                            saleItems.splice(index, 1);
+                        }
                     }
                 } else {
                     showMessage('Error', 'Could not retrieve product information to check stock.');
@@ -433,13 +467,21 @@ $taxRatePercent = TAX_RATE_PERCENT;
             });
     }
 
+    /**
+     * Removes an item from the sale items list (cart).
+     * @param {Event} event - The click event from the remove button.
+     */
     function handleRemoveItem(event) {
         const index = event.target.closest('button').dataset.index;
-        saleItems.splice(index, 1);
-        renderSaleItems();
-        updateTotals();
+        saleItems.splice(index, 1); // Remove item from array
+        renderSaleItems(); // Re-render the list
+        updateTotals(); // Recalculate and update totals
     }
 
+    /**
+     * Processes the complete sale transaction.
+     * Validates selections, sends sale data to the server, and handles responses.
+     */
     async function completeSale() {
         if (!selectedPatient) {
             showMessage('Patient Not Selected', 'Please search for and select a patient to complete the sale.');
@@ -453,76 +495,94 @@ $taxRatePercent = TAX_RATE_PERCENT;
 
         const totals = calculateTotals();
         const saleData = {
-            customer_type: 'Patient',
+            customer_type: 'Patient', // Assuming 'Patient' for selected patient
             patient_id: selectedPatient.patient_id,
-            sale_items: JSON.stringify(saleItems),
+            sale_items: JSON.stringify(saleItems), // Send sale items as a JSON string
             total_amount: totals.total.toFixed(2),
+            // You might want to add payment_method, discount_percent here if they are part of the form
+            // For simplicity, we'll assume default values or handle them on the server for now.
         };
 
         try {
+            // Disable button and show loading state
             completeSaleBtn.disabled = true;
             completeSaleBtn.textContent = 'Processing...';
             completeSaleBtn.classList.add('bg-gray-500', 'cursor-not-allowed');
+            completeSaleBtn.classList.remove('hover:bg-blue-700', 'transform', 'hover:scale-105'); // Remove hover effects
 
             console.log('Sending sale data:', saleData); // Log data being sent
 
             const response = await fetch('process_sale.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded', // Standard for form submissions
                 },
-                body: new URLSearchParams(saleData)
+                body: new URLSearchParams(saleData) // Encode data for x-www-form-urlencoded
             });
 
             if (!response.ok) {
-                // If the response is not ok, read the raw text and show it
+                // If the response is not ok (e.g., 400, 500 status), read the raw text and show it
                 const errorText = await response.text();
                 console.error('Server response not OK:', response.status, response.statusText);
                 console.error('Raw server response:', errorText);
-                showMessage('Sale Failed: Server Error', `The server responded with an error. Check the console for the full response and details.`);
-                return;
+                showMessage('Sale Failed: Server Error', `The server responded with an error (${response.status}). Please try again or contact support. Details: ${errorText.substring(0, 100)}...`);
+                return; // Stop execution
             }
 
-            const result = await response.json();
+            const result = await response.json(); // Attempt to parse JSON
             console.log('Received response:', result); // Log the parsed JSON response
 
             if (result.success) {
-                // Redirect to the new receipt page with the sale_id
+                showMessage('Sale Complete!', result.message || 'Sale processed successfully.');
+                // Redirect to the new receipt page with the sale_id if provided
                 if (result.sale_id) {
-                    window.location.href = `receipt.php?sale_id=${result.sale_id}`;
+                    // Small delay to allow user to read success message before redirect
+                    setTimeout(() => {
+                        window.location.href = `receipt.php?sale_id=${result.sale_id}`;
+                    }, 1500); 
                 } else {
-                    showMessage('Sale Success', result.message);
-                    clearSale();
+                    clearSale(); // Clear the form if no specific receipt page
                 }
             } else {
-                showMessage('Sale Failed', result.message);
+                showMessage('Sale Failed', result.message || 'An unknown error occurred during sale processing.');
             }
         } catch (error) {
             console.error('Error:', error);
-            showMessage('Error', `An unexpected error occurred during sale processing. Details: ${error.message}. Check the console for more details.`);
+            // Differentiate between network errors and JSON parsing errors
+            if (error instanceof SyntaxError) {
+                showMessage('Error', `Failed to process server response (Invalid JSON). Check console for details.`);
+            } else {
+                showMessage('Error', `An unexpected error occurred: ${error.message}. Please try again.`);
+            }
         } finally {
+            // Re-enable button and restore original text/styles
             completeSaleBtn.disabled = false;
             completeSaleBtn.textContent = 'Complete Sale';
             completeSaleBtn.classList.remove('bg-gray-500', 'cursor-not-allowed');
+            completeSaleBtn.classList.add('hover:bg-blue-700', 'transform', 'hover:scale-105'); // Restore hover effects
         }
     }
 
+    /**
+     * Clears all selected patient, products, and sale items, resetting the form.
+     */
     function clearSale() {
         saleItems = [];
         selectedProduct = null;
         selectedPatient = null;
         patientSearchInput.value = '';
         productSearchInput.value = '';
-        selectedPatientDisplay.classList.add('hidden');
-        renderSaleItems();
-        updateTotals();
+        selectedPatientDisplay.classList.add('hidden'); // Hide patient display
+        renderSaleItems(); // Clear rendered items
+        updateTotals(); // Reset totals
+        showMessage('Sale Cleared', 'The current sale has been cleared.');
     }
 
 
     // --- EVENT LISTENERS ---
     document.addEventListener('DOMContentLoaded', () => {
-        renderSaleItems();
-        updateTotals();
+        renderSaleItems(); // Initial render of empty cart
+        updateTotals(); // Initial update of totals (should be 0)
     });
 
     patientSearchInput.addEventListener('input', searchPatients);

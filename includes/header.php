@@ -73,6 +73,13 @@ $currentUserRole = $_SESSION['role'] ?? 'Guest';
                             <span class="text-lg">Sales</span>
                         </a>
                     </li>
+                    <!-- New link for Saturday Attendance -->
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>../patients/saturday_attendance.php" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-600 transition-colors duration-200">
+                            <i class="fas fa-calendar-check text-xl"></i> <!-- Icon for attendance -->
+                            <span class="text-lg">Saturday Attendance</span>
+                        </a>
+                    </li>
                     
                     <?php if ($currentUserRole === 'Admin'): // Admin specific link ?>
                     <li>

@@ -60,24 +60,29 @@ $total_amount_due_db = $sale['total_amount'];
 <html>
 <head>
     <title>Receipt #<?php echo htmlspecialchars($sale_id); ?></title>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
-            color: #000;
+            font-family: 'Inter', sans-serif; /* Changed font to Inter */
+            font-size: 14px; /* Slightly larger base font size */
+            color: #333; /* Darker text for better readability */
             margin: 0;
             padding: 0;
-            background: #fff;
+            background: #f4f4f4; /* Light background for visual separation */
         }
         #wrapper {
-            max-width: 300px;
-            margin: 0 auto;
-            padding: 10px;
-            border: 1px solid #000;
+            max-width: 320px; /* Slightly wider for better content flow */
+            margin: 20px auto; /* Add some margin from top/bottom */
+            padding: 20px; /* More padding */
+            border: 1px solid #eee; /* Lighter border */
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Soft shadow */
+            background: #fff;
+            border-radius: 8px; /* Rounded corners */
         }
         .header-section, .client-section, .footer-section {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px; /* More spacing */
         }
         .text-left { text-align: left; }
         .text-right { text-align: right; }
@@ -85,26 +90,55 @@ $total_amount_due_db = $sale['total_amount'];
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 15px; /* Spacing below tables */
         }
         th, td {
-            padding: 5px 0;
+            padding: 8px 0; /* More padding in table cells */
+        }
+        th {
+            font-weight: 600; /* Semi-bold for headers */
+            color: #555;
+            border-bottom: 1px solid #ddd; /* Lighter separator */
         }
         .item-row td {
-            border-bottom: 1px dashed #ddd;
+            border-bottom: 1px dashed #eee; /* Lighter dashed line */
         }
         .logo {
-            font-weight: bold;
-            font-size: 1.5em;
+            font-weight: 700; /* Bold for logo */
+            font-size: 1.8em; /* Larger logo text */
+            color: #222;
+            margin-bottom: 5px;
+        }
+        p {
+            line-height: 1.5; /* Better line spacing for paragraphs */
+            margin-bottom: 5px;
+        }
+        hr {
+            border: none;
+            border-top: 1px dashed #ccc; /* Lighter and dashed hr */
+            margin: 15px 0; /* More margin for separators */
+        }
+        .total-row td {
+            font-weight: 700; /* Bold for total row */
+            font-size: 1.3em; /* Larger total font size */
+            color: #000;
         }
         @media print {
             body {
                 background: none;
+                font-size: 12px; /* Adjust font size for print if needed */
             }
             #wrapper {
                 border: none;
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
             }
             .no-print {
                 display: none;
+            }
+            .total-row td {
+                font-size: 1.2em; /* Slightly smaller total font for print */
             }
         }
     </style>
@@ -116,14 +150,14 @@ $total_amount_due_db = $sale['total_amount'];
             <p>123 Nutrition St, Kampala</p>
             <p>Tel: +256 771 234567</p>
             <p>Email: info@nutrition.com</p>
-            <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+            <hr>
         </div>
         
         <div class="client-section">
             <p><strong>Receipt ID:</strong> #<?php echo htmlspecialchars($sale_id); ?></p>
             <p><strong>Client Name:</strong> <?php echo $client_name; ?></p>
             <p><strong>Client ID:</strong> <?php echo $client_id; ?></p>
-            <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+            <hr>
         </div>
 
         <table>
@@ -139,7 +173,7 @@ $total_amount_due_db = $sale['total_amount'];
                 <tr class="item-row">
                     <td class="text-left"><?php echo htmlspecialchars($item['product_name']); ?></td>
                     <td class="text-right"><?php echo htmlspecialchars($item['quantity']); ?></td>
-                    <td class="text-right"><?php echo number_format($item['unit_price'], 2); ?></td>
+                    <td class="text-right"><?php echo number_format($item['price'], 2); ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -155,16 +189,16 @@ $total_amount_due_db = $sale['total_amount'];
                 <td class="text-right"><?php echo number_format($tax_amount_db, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
             </tr>
             <tr>
-                <td colspan="2"><hr style="border-top: 1px dashed #000; margin: 5px 0;"></td>
+                <td colspan="2"><hr style="border-top: 1px dashed #ccc; margin: 5px 0;"></td>
             </tr>
-            <tr> 
+            <tr class="total-row"> 
                 <td class="text-right">TOTAL:</td>
-                <td class="text-right" style="font-weight: bold; font-size: 1.2em;"><?php echo number_format($total_amount_due_db, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
+                <td class="text-right"><?php echo number_format($total_amount_due_db, 2); ?> <?php echo DEFAULT_CURRENCY; ?></td>
             </tr>
         </table>
         
         <div class="footer-section">
-            <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+            <hr>
             <p>Thank you for your purchase!</p>
             <p style="margin-top: 10px;">Please keep this receipt for your records.</p>
             <p style="margin-top: 10px;">Date & Time: <?php echo date('d/m/Y H:i:s', strtotime($date_completed)); ?></p>

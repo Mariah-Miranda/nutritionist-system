@@ -73,3 +73,22 @@
 .w-64 { width: 16rem; /* 256px */ }
 .p-8 { padding: 2rem; }
 .overflow-y-auto { overflow-y: auto; }
+
+/* Further responsive adjustments for dashboard cards on smaller screens */
+@media (max-width: 640px) {
+    .dashboard-card {
+        padding: 1rem; /* Reduce padding on small screens */
+    }
+
+    .dashboard-card h3 {
+        font-size: 1.1rem; /* Slightly smaller heading */
+    }
+
+    .dashboard-card p.value {
+        font-size: 1.75rem; /* Smaller value text */
+    }
+
+    .dashboard-card p.description {
+        font-size: 0.8rem; /* Smaller description text */
+    }
+}

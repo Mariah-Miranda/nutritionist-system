@@ -7,6 +7,7 @@
     display: flex;
     margin-bottom: 2rem;
     border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
 }
 
 .admin-tabs button {
@@ -29,6 +30,35 @@
     border-color: #3b82f6;
     font-weight: 600;
 }
+
+/* Responsive adjustments for admin tabs */
+@media (max-width: 768px) {
+    .admin-tabs {
+        margin-bottom: 1.5rem;
+        justify-content: center; /* Center tabs on smaller screens */
+    }
+    .admin-tabs button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        flex-grow: 1; /* Allow tabs to grow and fill space */
+        min-width: 120px; /* Ensure a minimum width for tabs */
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-tabs button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        flex-basis: 100%; /* Make each tab take full width on very small screens */
+        border-radius: 0.5rem; /* Round all corners when stacked */
+        margin-bottom: 0.5rem; /* Add space between stacked tabs */
+    }
+    .admin-tabs {
+        flex-direction: column; /* Stack tabs vertically */
+        border-bottom: none; /* Remove bottom border when stacked */
+    }
+}
+
 
 /* Table styles for user management */
 .admin-table {
@@ -54,6 +84,27 @@
 
 .admin-table tbody tr:hover {
     background-color: #f0f4f8;
+}
+
+/* Responsive adjustments for admin table */
+@media (max-width: 768px) {
+    .admin-table th,
+    .admin-table td {
+        padding: 0.75rem; /* Reduce padding for smaller screens */
+        font-size: 0.8rem; /* Smaller font size for table content */
+    }
+
+    /* Hide less important columns on small screens if necessary,
+       or ensure horizontal scrolling is enabled via a wrapper */
+    /* Example: .admin-table th:nth-child(3), .admin-table td:nth-child(3) { display: none; } */
+}
+
+@media (max-width: 640px) {
+    .admin-table th,
+    .admin-table td {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
 }
 
 /* Status badges */
@@ -91,6 +142,14 @@
     color: #1e40af;
 }
 
+/* Responsive adjustments for status badges */
+@media (max-width: 640px) {
+    .status-badge {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.65rem;
+    }
+}
+
 /* Action buttons in tables */
 .admin-table .action-buttons a {
     margin-right: 0.75rem;
@@ -99,4 +158,12 @@
 }
 .admin-table .action-buttons a:hover {
     text-decoration: underline;
+}
+
+/* Responsive adjustments for action buttons */
+@media (max-width: 640px) {
+    .admin-table .action-buttons a {
+        margin-right: 0.5rem;
+        font-size: 0.8rem;
+    }
 }

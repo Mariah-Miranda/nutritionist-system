@@ -34,8 +34,6 @@ body {
 }
 
 /* Global Styles */
-
-
 h2 {
   margin-bottom: 20px;
 }
@@ -77,11 +75,19 @@ form.form-box .btn-cancel {
 }
 
 /* Table Styles */
+/* Wrapper for responsive tables */
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Improves scrolling on iOS */
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  min-width: 600px; /* Ensure table doesn't shrink too much on small screens */
 }
 
 th, td {
@@ -113,7 +119,9 @@ thead {
 
 .search-bar input[type="text"] {
   padding: 8px;
-  width: 250px;
+  width: 100%; /* Make it full-width on mobile */
+  max-width: 250px; /* Retain max-width for desktop */
+  box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 .search-bar button,
@@ -149,12 +157,14 @@ thead {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-bottom: 30px;
+  overflow-x: auto; /* Ensure tables are scrollable on small screens */
 }
 
 .sales-index-table {
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
+  min-width: 600px; /* Ensure table doesn't shrink too much */
 }
 
 .sales-index-table thead {
@@ -188,7 +198,7 @@ thead {
   display:flex;
   justify-content: left;
   gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allow navigation items to wrap on smaller screens */
   margin-top: 30px;
   padding-bottom: 10px;
 }
@@ -216,17 +226,32 @@ thead {
   .sales-index-nav {
     flex-direction: column;
     align-items: center;
+    gap: 10px; /* Adjust gap for stacked items */
   }
 
   .sales-index-link {
-    width: 80%;
+    width: 90%; /* Make links wider on mobile */
+    max-width: 300px; /* Prevent them from becoming too wide on tablets */
     text-align: center;
+    margin-right: 0; /* Remove right margin when stacked */
   }
 
-  .sales-index-table th, 
+  .sales-index-table th,
   .sales-index-table td {
     padding: 10px 8px;
     font-size: 0.9rem;
+  }
+
+  .search-bar input[type="text"] {
+    max-width: 100%; /* Allow search input to be full width on small screens */
+  }
+
+  .search-bar button,
+  .search-bar a {
+    margin-left: 0; /* Remove left margin for stacked buttons */
+    margin-top: 10px; /* Add top margin for spacing when stacked */
+    width: 100%; /* Make buttons full width */
+    text-align: center;
   }
 }
 
@@ -330,14 +355,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Links */
-
-<<<<<<< HEAD
-=======
 a:hover {
-    color: V#2563eb;
+    color: #2563eb;
     text-decoration: underline;
 }
->>>>>>> a3343cdef5e9f699bd6d1b8ff66d4c9a421eb927
 
 /* Buttons - basic styles, further styled by Tailwind or specific CSS */
 button, .btn {

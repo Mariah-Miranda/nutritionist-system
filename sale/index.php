@@ -15,7 +15,7 @@ $todayStats = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get total customers (now considering patients as primary clients)
 $stmt = $pdo->query("SELECT COUNT(*) as total FROM patients");
-$totalClients = $stmt->fetchColumn();
+$totalCustomers = $stmt->fetchColumn();
 
 // Get product count
 $stmt = $pdo->query("SELECT COUNT(*) as total FROM products");
@@ -35,15 +35,13 @@ $totalProducts = $stmt->fetchColumn();
         <h1 class="sales-index-title">Sales Dashboard</h1>
 
         <!-- Navigation buttons -->
-        <div class="bg-white rounded-lg shadow-md p-4 mb-6 flex justify-between items-center">
-            <div class="sales-index-nav">
-                <a href="new.php" class="sales-index-link"> + New Sale</a>
-                <a href="history.php" class="sales-index-link">View Sales History</a>
-                <a href="summary.php" class="sales-index-link">View Sales Summary</a>
-                <a href="top_clients.php" class="sales-index-link">View Top Clients</a>
-            </div>
+          <div class="bg-white rounded-lg shadow-md p-4 mb-6 flex justify-between items-center">
+        <div class="sales-index-nav">
+            <a href="new.php" class="sales-index-link"> + New Sale</a>
+            <a href="history.php" class="sales-index-link">View Sales History</a>
+            <a href="summary.php" class="sales-index-link">view Sales Summary</a>
         </div>
-
+          </div>
         <!-- Table section -->
         <div class="sales-index-table-wrapper">
             <table class="sales-index-table">

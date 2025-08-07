@@ -53,7 +53,7 @@ include_once __DIR__ . '/../includes/header.php';
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-gray-800">Appointment Calendar</h2>
-        <a href="<?php echo BASE_URL; ?>appointments/" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200">
+        <a href="<?php echo BASE_URL; ?>index.php" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200">
             <i class="fas fa-arrow-left mr-2"></i>
             Back to Dashboard
         </a>

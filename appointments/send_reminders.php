@@ -30,7 +30,7 @@ try {
 <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Send Appointment Reminders</h2>
-        <a href="<?php echo BASE_URL; ?>appointments/" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors">Back to Dashboard</a>
+        <a href="<?php echo BASE_URL; ?>index.php" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors">Back to Dashboard</a>
     </div>
 
     <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
